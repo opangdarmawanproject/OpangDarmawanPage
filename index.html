@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opang Darmawan | Portofolio Retro Pop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & GLOBAL VARIABLES --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --pop-yellow: #FFD700;
+            --pop-pink: #FF007F;
+            --pop-blue: #00E5FF;
+            --border-thick: 4px solid #000;
+            --shadow-pop: 6px 6px 0px #000;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Space Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- HALAMAN UTAMA (HERO) --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .name-container {
+            font-family: 'Righteous', cursive;
+            font-size: clamp(3rem, 8vw, 8rem);
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            padding: 0 20px;
+        }
+
+        .letter {
+            cursor: pointer;
+            transition: transform 0.1s ease, color 0.2s ease;
+            display: inline-block;
+        }
+
+        .letter:hover {
+            transform: translateY(-10px) scale(1.1);
+            color: var(--pop-pink);
+            text-shadow: 4px 4px 0px #000;
+        }
+
+        /* --- NAVIGASI MENU --- */
+        .nav-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--pop-yellow);
+            border: var(--border-thick);
+            padding: 10px 20px;
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+        }
+        
+        .nav-btn.btn-sosmed { background: var(--pop-blue); }
+        .nav-btn.btn-wa { background: #25D366; color: white; }
+
+        .nav-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        /* --- KONTEN PORTOFOLIO --- */
+        #content-section {
+            display: none;
+            padding: 100px 20px 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .section-title {
+            font-family: 'Righteous', cursive;
+            font-size: 3rem;
+            text-transform: uppercase;
+            background: var(--pop-pink);
+            color: white;
+            display: inline-block;
+            padding: 10px 20px;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-pop);
+            margin-bottom: 40px;
+        }
+
+        .grid-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            border: var(--border-thick);
+            box-shadow: var(--shadow-pop);
+            background: white;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img, .card video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: var(--border-thick);
+            display: block;
+        }
+
+        .card-info {
+            padding: 15px;
+            font-weight: bold;
+            background: var(--pop-yellow);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: var(--border-thick);
+            padding: 10px 20px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        /* --- MODAL (POPUP) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            border: var(--border-thick);
+            box-shadow: 10px 10px 0px #000;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -15px; right: -15px;
+            background: var(--pop-pink);
+            color: white;
+            border: var(--border-thick);
+            width: 40px; height: 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-link {
+            display: block;
+            margin: 10px 0;
+            padding: 15px;
+            background: var(--pop-yellow);
+            border: var(--border-thick);
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.2s;
+        }
+        .social-link:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
+        
+        .wa-link { background: #25D366; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="hero">
+        <div class="name-container" id="nameText">
+            </div>
+        <p style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;">(Hover / sentuh huruf di atas)</p>
+    </div>
+
+    <div id="content-section">
+        <button class="back-btn" onclick="showHero()">← KEMBALI</button>
+        <h2 class="section-title" id="section-title">Kategori</h2>
+        <div class="grid-gallery" id="gallery-container">
+            </div>
+    </div>
+
+    <div class="nav-container">
+        <button class="nav-btn" onclick="loadContent('Fotografi')">📸 Fotografi</button>
+        <button class="nav-btn" onclick="loadContent('3D')">🧊 3D</button>
+        <button class="nav-btn" onclick="loadContent('Video')">🎥 Video</button>
+        <button class="nav-btn" onclick="loadContent('Desain')">🎨 Desain</button>
+        <button class="nav-btn" onclick="loadContent('Virtual Tour')">🌐 Virtual Tour</button>
+        <button class="nav-btn btn-sosmed" onclick="openModal('modal-sosmed')">🌍 Social Media</button>
+        <button class="nav-btn btn-wa" onclick="openModal('modal-wa')">💬 WhatsApp</button>
+    </div>
+
+    <div class="modal-overlay" id="modal-sosmed">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeModal('modal-sosmed')">X</button>
+            <h2 style="font-family: 'Righteous', cursive;">Temukan Saya</h2>
+            <a href="#" class="social-link">Instagram: @opangdarmawan</a>
+            <a href="#" class="social-link" style="background: var(--pop-blue);">LinkedIn: Opang Darmawan</a>
+            <a href="#" class="social-link" style="background: white;">Behance: Opang Darmawan</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-wa">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeModal('modal-wa')">X</button>
+            <h2 style="font-family: 'Righteous', cursive;">Mari Berkolaborasi!</h2>
+            <p>Klik tombol di bawah ini untuk mengirim pesan WhatsApp kepada saya.</p>
+            <a href="https://wa.me/6280000000000?text=Halo%20Opang,%20saya%20tertarik%20dengan%20portofolio%20Anda!" target="_blank" class="social-link wa-link">Chat WhatsApp Sekarang</a>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SETUP AUDIO GITAR (WEB AUDIO API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Frekuensi chord gitar (C Major Pentatonic untuk nada yang enak didengar)
+        const notes = [
+            130.81, // C3
+            146.83, // D3
+            164.81, // E3
+            196.00, // G3
+            220.00, // A3
+            261.63, // C4
+            293.66, // D4
+            329.63, // E4
+            392.00, // G4
+            440.00, // A4
+            523.25, // C5
+            587.33, // D5
+            659.25  // E5
+        ];
+
+        function playGuitarString(frequency) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'triangle'; // Suara mirip petikan senar
+            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            
+            // Envelope (membuat suara memudar seperti gitar)
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
+
+        // --- 2. GENERATE TEKS HERO ---
+        const nameString = "Opang Darmawan";
+        const nameContainer = document.getElementById('nameText');
+        
+        // Pisahkan per karakter, tambahkan event listener untuk suara
+        nameString.split('').forEach((char, index) => {
+            if (char === ' ') {
+                const space = document.createElement('span');
+                space.style.width = '30px';
+                nameContainer.appendChild(space);
+                return;
+            }
+            const span = document.createElement('span');
+            span.className = 'letter';
+            span.innerText = char;
+            
+            // Pilih nada berdasarkan index huruf
+            const noteFreq = notes[index % notes.length];
+            
+            // Mainkan nada saat di hover atau di tap
+            span.addEventListener('mouseenter', () => playGuitarString(noteFreq));
+            span.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Mencegah double trigger di mobile
+                playGuitarString(noteFreq);
+                span.style.color = 'var(--pop-pink)';
+                setTimeout(() => span.style.color = '', 200);
+            });
+            
+            nameContainer.appendChild(span);
+        });
+
+        // --- 3. DATA DUMMY KATEGORI ---
+        const portfolioData = {
+            'Fotografi': [
+                { img: 'https://picsum.photos/seed/foto1/400/300', title: 'Street Photography: Urban Vibe' },
+                { img: 'https://picsum.photos/seed/foto2/400/300', title: 'Potret Manusia' },
+                { img: 'https://picsum.photos/seed/foto3/400/300', title: 'Landscape Alam Liar' }
+            ],
+            '3D': [
+                { img: 'https://picsum.photos/seed/3d1/400/300', title: 'Karakter Low-Poly' },
+                { img: 'https://picsum.photos/seed/3d2/400/300', title: 'Render Interior Rumah' },
+                { img: 'https://picsum.photos/seed/3d3/400/300', title: 'Aset Game Sci-Fi' }
+            ],
+            'Video': [
+                { img: 'https://picsum.photos/seed/vid1/400/300', title: 'Aftermovie Festival Musik' },
+                { img: 'https://picsum.photos/seed/vid2/400/300', title: 'Iklan Komersial Produk' },
+                { img: 'https://picsum.photos/seed/vid3/400/300', title: 'Vlog Perjalanan' }
+            ],
+            'Desain': [
+                { img: 'https://picsum.photos/seed/desain1/400/300', title: 'Logo & Branding Startup' },
+                { img: 'https://picsum.photos/seed/desain2/400/300', title: 'Poster Acara Musik' },
+                { img: 'https://picsum.photos/seed/desain3/400/300', title: 'UI/UX Aplikasi Mobile' }
+            ],
+            'Virtual Tour': [
+                { img: 'https://picsum.photos/seed/vt1/400/300', title: 'Museum 360°' },
+                { img: 'https://picsum.photos/seed/vt2/400/300', title: 'Tur Properti Real Estate' }
+            ]
+        };
+
+        // --- 4. LOGIKA NAVIGASI ---
+        function loadContent(category) {
+            document.getElementById('hero').style.display = 'none';
+            const contentSec = document.getElementById('content-section');
+            contentSec.style.display = 'block';
+            
+            document.getElementById('section-title').innerText = category;
+            
+            const gallery = document.getElementById('gallery-container');
+            gallery.innerHTML = ''; // Bersihkan konten lama
+            
+            // Loop data untuk membuat card portofolio
+            portfolioData[category].forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.title}">
+                    <div class="card-info">${item.title}</div>
+                `;
+                gallery.appendChild(card);
+            });
+            
+            window.scrollTo(0,0);
+        }
+
+        function showHero() {
+            document.getElementById('content-section').style.display = 'none';
+            document.getElementById('hero').style.display = 'flex';
+        }
+
+        // --- 5. LOGIKA MODAL (POP-UP) ---
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Tutup modal jika klik area luar kotak modal
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
