@@ -3,409 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opang Darmawan | Portofolio Retro Pop</title>
+    <title>Retro Pop Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* --- RESET & GLOBAL VARIABLES --- */
+        /* --- TEMA RETRO POP (MEMPHIS STYLE) --- */
         :root {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --pop-yellow: #FFD700;
-            --pop-pink: #FF007F;
-            --pop-blue: #00E5FF;
-            --border-thick: 4px solid #000;
-            --shadow-pop: 6px 6px 0px #000;
+            --pink: #ff007f;
+            --cyan: #00f3ff;
+            --yellow: #ffd000;
+            --black: #111111;
+            --white: #ffffff;
+            --bg: #f4f4fa;
         }
 
         body {
             margin: 0;
             font-family: 'Space Mono', monospace;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg);
+            color: var(--black);
             overflow-x: hidden;
         }
 
-        /* --- HALAMAN UTAMA (HERO) --- */
-        #hero {
+        h1, h2, h3, h4, .retro-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        /* --- HALAMAN INTRO (PERMISI) --- */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
             height: 100vh;
+            background: var(--black);
+            background-image: radial-gradient(var(--pink) 15%, transparent 16%), radial-gradient(var(--pink) 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .intro-title {
+            color: var(--white);
+            background: var(--black);
+            padding: 10px 20px;
+            border: 4px solid var(--cyan);
+            box-shadow: 8px 8px 0px var(--yellow);
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        #scatter-container {
+            position: relative;
+            width: 100%;
+            height: 40vh;
+        }
+
+        .scattered-letter {
+            position: absolute;
+            font-size: 3.5rem;
+            font-family: 'Righteous', cursive;
+            color: var(--yellow);
+            -webkit-text-stroke: 2px var(--black);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            text-shadow: 4px 4px 0px var(--pink);
+        }
+
+        .scattered-letter:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .scattered-letter.glow {
+            color: var(--white);
+            text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan), 4px 4px 0px var(--black);
+        }
+
+        .drop-zone {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .slot {
+            width: 50px;
+            height: 60px;
+            background: var(--white);
+            border: 4px dashed var(--cyan);
+            display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.5s ease;
-        }
-
-        .name-container {
+            font-size: 2.5rem;
             font-family: 'Righteous', cursive;
-            font-size: clamp(3rem, 8vw, 8rem);
-            text-align: center;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 5px;
-            padding: 0 20px;
+            color: var(--black);
+            box-shadow: 4px 4px 0px var(--black);
         }
 
-        .letter {
+        #reset-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: var(--pink);
+            color: white;
+            border: 4px solid var(--black);
             cursor: pointer;
-            transition: transform 0.1s ease, color 0.2s ease;
-            display: inline-block;
+            font-weight: bold;
+            box-shadow: 4px 4px 0px var(--black);
         }
 
-        .letter:hover {
-            transform: translateY(-10px) scale(1.1);
-            color: var(--pop-pink);
-            text-shadow: 4px 4px 0px #000;
+        #reset-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px var(--black);
         }
 
-        /* --- NAVIGASI MENU --- */
-        .nav-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        /* --- HALAMAN UTAMA --- */
+        #main-app {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: var(--yellow);
+            border: 5px solid var(--black);
+            box-shadow: 10px 10px 0px var(--pink);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Navigasi Kategori */
+        .nav-menu {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
             justify-content: center;
-            z-index: 100;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .nav-btn {
-            background: var(--pop-yellow);
-            border: var(--border-thick);
+            background: var(--cyan);
+            border: 3px solid var(--black);
             padding: 10px 20px;
-            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
             font-weight: bold;
-            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 4px 4px 0px #000;
-            transition: all 0.2s;
+            box-shadow: 5px 5px 0px var(--black);
+            transition: 0.1s;
         }
 
         .nav-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px #000;
+            background: var(--white);
         }
-        
-        .nav-btn.btn-sosmed { background: var(--pop-blue); }
-        .nav-btn.btn-wa { background: #25D366; color: white; }
 
         .nav-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px #000;
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px var(--black);
         }
 
-        /* --- KONTEN PORTOFOLIO --- */
-        #content-section {
-            display: none;
-            padding: 100px 20px 100px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        .section-title {
-            font-family: 'Righteous', cursive;
-            font-size: 3rem;
-            text-transform: uppercase;
-            background: var(--pop-pink);
-            color: white;
-            display: inline-block;
-            padding: 10px 20px;
-            border: var(--border-thick);
-            box-shadow: var(--shadow-pop);
-            margin-bottom: 40px;
-        }
-
-        .grid-gallery {
+        /* Grid Portfolio */
+        .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .card {
-            border: var(--border-thick);
-            box-shadow: var(--shadow-pop);
-            background: white;
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 8px 8px 0px var(--black);
+            padding: 15px;
+            cursor: pointer;
             transition: transform 0.2s;
         }
 
         .card:hover {
             transform: translateY(-5px);
+            background: #fffdf0;
         }
 
-        .card img, .card video {
+        .card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-bottom: var(--border-thick);
-            display: block;
+            border: 3px solid var(--black);
         }
 
-        .card-info {
-            padding: 15px;
-            font-weight: bold;
-            background: var(--pop-yellow);
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: white;
-            border: var(--border-thick);
-            padding: 10px 20px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px #000;
-            font-family: inherit;
-            font-weight: bold;
-        }
-
-        /* --- MODAL (POPUP) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-box {
-            background: white;
-            border: var(--border-thick);
-            box-shadow: 10px 10px 0px #000;
-            padding: 30px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: -15px; right: -15px;
-            background: var(--pop-pink);
-            color: white;
-            border: var(--border-thick);
-            width: 40px; height: 40px;
+        .card h3 {
+            margin: 15px 0 5px 0;
             font-size: 1.5rem;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
             font-weight: bold;
+        }
+
+        /* --- SOSIAL MEDIA & WHATSAPP FLOATING --- */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .social-menu {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .social-btn {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: bold;
+            box-shadow: 4px 4px 0px var(--black);
+            text-align: center;
+        }
+
+        .social-btn.wa { background: #25D366; color: white; }
+        .social-btn.ig { background: var(--pink); color: white; }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--yellow);
+            border: 4px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+            font-size: 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .social-link {
-            display: block;
-            margin: 10px 0;
-            padding: 15px;
-            background: var(--pop-yellow);
-            border: var(--border-thick);
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            box-shadow: 4px 4px 0px #000;
-            transition: all 0.2s;
+        /* --- LIGHTBOX (PENAMPIL MEDIA Penuh) --- */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(17, 17, 17, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
-        .social-link:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
-        
-        .wa-link { background: #25D366; color: white; }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: var(--pink);
+            color: white;
+            border: 4px solid var(--white);
+            font-size: 2rem;
+            width: 50px; height: 50px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--cyan);
+        }
+
+        #media-container {
+            max-width: 90vw;
+            max-height: 85vh;
+            border: 5px solid var(--yellow);
+            box-shadow: 10px 10px 0px var(--cyan);
+            background: white;
+        }
+
+        #media-container img, #media-container video, #media-container iframe {
+            width: 100%;
+            height: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        iframe {
+            width: 80vw;
+            height: 80vh;
+        }
+
     </style>
 </head>
 <body>
 
-    <div id="hero">
-        <div class="name-container" id="nameText">
+    <div id="intro-screen">
+        <div class="intro-title">
+            <h2 style="margin:0;">KLIK HURUF UNTUK MENYUSUN KATA</h2>
+            <p style="margin:5px 0 0 0; font-size:0.8rem;">Susun menjadi "PERMISI"</p>
+        </div>
+        
+        <div id="scatter-container">
             </div>
-        <p style="margin-top: 20px; font-weight: bold; font-size: 1.2rem;">(Hover / sentuh huruf di atas)</p>
+
+        <div class="drop-zone" id="slots">
+            <div class="slot" id="slot-0"></div>
+            <div class="slot" id="slot-1"></div>
+            <div class="slot" id="slot-2"></div>
+            <div class="slot" id="slot-3"></div>
+            <div class="slot" id="slot-4"></div>
+            <div class="slot" id="slot-5"></div>
+            <div class="slot" id="slot-6"></div>
+        </div>
+
+        <button id="reset-btn" onclick="resetGame()">ULANGI</button>
     </div>
 
-    <div id="content-section">
-        <button class="back-btn" onclick="showHero()">← KEMBALI</button>
-        <h2 class="section-title" id="section-title">Kategori</h2>
-        <div class="grid-gallery" id="gallery-container">
+    <div id="main-app">
+        <header>
+            <h1>Galeri Kreatif</h1>
+            <p>Selamat Datang di Portofolio Retro Pop!</p>
+        </header>
+
+        <div class="nav-menu">
+            <button class="nav-btn" onclick="filterData('all')">Semua</button>
+            <button class="nav-btn" onclick="filterData('fotografi')">Fotografi</button>
+            <button class="nav-btn" onclick="filterData('video')">Video</button>
+            <button class="nav-btn" onclick="filterData('desain')">Desain</button>
+            <button class="nav-btn" onclick="filterData('3d')">3D Desain</button>
+        </div>
+
+        <div class="portfolio-grid">
+            <div class="card" data-category="fotografi" onclick="openMedia('img', 'https://picsum.photos/1200/800?random=1')">
+                <img src="https://picsum.photos/400/300?random=1" alt="Foto">
+                <h3>Sesi Foto Urban</h3>
+                <p>Fotografi</p>
             </div>
-    </div>
-
-    <div class="nav-container">
-        <button class="nav-btn" onclick="loadContent('Fotografi')">📸 Fotografi</button>
-        <button class="nav-btn" onclick="loadContent('3D')">🧊 3D</button>
-        <button class="nav-btn" onclick="loadContent('Video')">🎥 Video</button>
-        <button class="nav-btn" onclick="loadContent('Desain')">🎨 Desain</button>
-        <button class="nav-btn" onclick="loadContent('Virtual Tour')">🌐 Virtual Tour</button>
-        <button class="nav-btn btn-sosmed" onclick="openModal('modal-sosmed')">🌍 Social Media</button>
-        <button class="nav-btn btn-wa" onclick="openModal('modal-wa')">💬 WhatsApp</button>
-    </div>
-
-    <div class="modal-overlay" id="modal-sosmed">
-        <div class="modal-box">
-            <button class="close-btn" onclick="closeModal('modal-sosmed')">X</button>
-            <h2 style="font-family: 'Righteous', cursive;">Temukan Saya</h2>
-            <a href="#" class="social-link">Instagram: @opangdarmawan</a>
-            <a href="#" class="social-link" style="background: var(--pop-blue);">LinkedIn: Opang Darmawan</a>
-            <a href="#" class="social-link" style="background: white;">Behance: Opang Darmawan</a>
+            <div class="card" data-category="video" onclick="openMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')">
+                <img src="https://picsum.photos/400/300?random=2" alt="Video">
+                <h3>Video Promosi</h3>
+                <p>Video</p>
+            </div>
+            <div class="card" data-category="desain" onclick="openMedia('pdf', 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf')">
+                <img src="https://picsum.photos/400/300?random=3" alt="Desain">
+                <h3>Company Profile</h3>
+                <p>Desain (PDF)</p>
+            </div>
+            <div class="card" data-category="3d" onclick="openMedia('img', 'https://picsum.photos/1200/800?random=4')">
+                <img src="https://picsum.photos/400/300?random=4" alt="3D Desain">
+                <h3>Render Karakter</h3>
+                <p>3D Desain</p>
+            </div>
+             <div class="card" data-category="fotografi" onclick="openMedia('img', 'https://picsum.photos/1200/800?random=5')">
+                <img src="https://picsum.photos/400/300?random=5" alt="Foto">
+                <h3>Foto Produk</h3>
+                <p>Fotografi</p>
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="modal-wa">
-        <div class="modal-box">
-            <button class="close-btn" onclick="closeModal('modal-wa')">X</button>
-            <h2 style="font-family: 'Righteous', cursive;">Mari Berkolaborasi!</h2>
-            <p>Klik tombol di bawah ini untuk mengirim pesan WhatsApp kepada saya.</p>
-            <a href="https://wa.me/6280000000000?text=Halo%20Opang,%20saya%20tertarik%20dengan%20portofolio%20Anda!" target="_blank" class="social-link wa-link">Chat WhatsApp Sekarang</a>
+    <div class="fab-container" id="fab-container" style="display:none;">
+        <div class="social-menu" id="social-menu">
+            <a href="https://wa.me/6281234567890" target="_blank" class="social-btn wa">WhatsApp</a>
+            <a href="#" class="social-btn ig">Instagram</a>
+            <a href="#" class="social-btn">Twitter / X</a>
         </div>
+        <button class="fab" onclick="toggleSocial()">💬</button>
+    </div>
+
+    <div id="lightbox">
+        <button class="close-btn" onclick="closeMedia()">X</button>
+        <div id="media-container"></div>
     </div>
 
     <script>
-        // --- 1. SETUP AUDIO GITAR (WEB AUDIO API) ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Frekuensi chord gitar (C Major Pentatonic untuk nada yang enak didengar)
-        const notes = [
-            130.81, // C3
-            146.83, // D3
-            164.81, // E3
-            196.00, // G3
-            220.00, // A3
-            261.63, // C4
-            293.66, // D4
-            329.63, // E4
-            392.00, // G4
-            440.00, // A4
-            523.25, // C5
-            587.33, // D5
-            659.25  // E5
-        ];
+        // --- WEB AUDIO API (Suara Gitar Synth) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
 
-        function playGuitarString(frequency) {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
+        function playGuitarNote(freq) {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            
-            osc.type = 'triangle'; // Suara mirip petikan senar
-            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-            
-            // Envelope (membuat suara memudar seperti gitar)
+
+            // Gelombang 'triangle' menyerupai petikan senar ringan
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            // Envelope (Mengatur efek petikan/memudar)
             gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-            
+
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
+
             osc.start();
             osc.stop(audioCtx.currentTime + 1.5);
         }
 
-        // --- 2. GENERATE TEKS HERO ---
-        const nameString = "Opang Darmawan";
-        const nameContainer = document.getElementById('nameText');
-        
-        // Pisahkan per karakter, tambahkan event listener untuk suara
-        nameString.split('').forEach((char, index) => {
-            if (char === ' ') {
-                const space = document.createElement('span');
-                space.style.width = '30px';
-                nameContainer.appendChild(space);
-                return;
+        // --- LOGIKA GAME "PERMISI" ---
+        const targetWord = "PERMISI";
+        // Frekuensi nada (Tangga nada pentatonik agar terdengar harmonis)
+        const notes = { 'P': 329.63, 'E': 392.00, 'R': 440.00, 'M': 523.25, 'I': 587.33, 'S': 659.25, 'I2': 783.99 };
+        let currentSpelling = "";
+        let scatterElements = [];
+
+        function initGame() {
+            const container = document.getElementById('scatter-container');
+            container.innerHTML = '';
+            currentSpelling = '';
+            
+            // Bersihkan slot
+            for(let i=0; i<7; i++) {
+                document.getElementById('slot-'+i).innerText = '';
             }
-            const span = document.createElement('span');
-            span.className = 'letter';
-            span.innerText = char;
-            
-            // Pilih nada berdasarkan index huruf
-            const noteFreq = notes[index % notes.length];
-            
-            // Mainkan nada saat di hover atau di tap
-            span.addEventListener('mouseenter', () => playGuitarString(noteFreq));
-            span.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // Mencegah double trigger di mobile
-                playGuitarString(noteFreq);
-                span.style.color = 'var(--pop-pink)';
-                setTimeout(() => span.style.color = '', 200);
+
+            // Buat huruf berhamburan
+            let letters = ['P', 'E', 'R', 'M', 'I', 'S', 'I'];
+            // Acak array
+            letters = letters.sort(() => Math.random() - 0.5);
+
+            letters.forEach((char, index) => {
+                let el = document.createElement('div');
+                el.innerText = char;
+                el.className = 'scattered-letter';
+                
+                // Posisi Acak
+                el.style.left = Math.floor(Math.random() * 80) + 10 + '%';
+                el.style.top = Math.floor(Math.random() * 80) + 10 + '%';
+                
+                el.onclick = () => handleLetterClick(el, char);
+                container.appendChild(el);
+                scatterElements.push(el);
             });
-            
-            nameContainer.appendChild(span);
-        });
+        }
 
-        // --- 3. DATA DUMMY KATEGORI ---
-        const portfolioData = {
-            'Fotografi': [
-                { img: 'Screenshot 2026-06-08 201525.png' },
-                { img: 'https://picsum.photos/seed/foto2/400/300', title: 'Potret Manusia' },
-                { img: 'https://picsum.photos/seed/foto3/400/300', title: 'Landscape Alam Liar' }
-            ],
-            '3D': [
-                { img: 'https://picsum.photos/seed/3d1/400/300', title: 'Karakter Low-Poly' },
-                { img: 'https://picsum.photos/seed/3d2/400/300', title: 'Render Interior Rumah' },
-                { img: 'https://picsum.photos/seed/3d3/400/300', title: 'Aset Game Sci-Fi' }
-            ],
-            'Video': [
-                { img: 'https://picsum.photos/seed/vid1/400/300', title: 'Aftermovie Festival Musik' },
-                { img: 'https://picsum.photos/seed/vid2/400/300', title: 'Iklan Komersial Produk' },
-                { img: 'https://picsum.photos/seed/vid3/400/300', title: 'Vlog Perjalanan' }
-            ],
-            'Desain': [
-                { img: 'https://picsum.photos/seed/desain1/400/300', title: 'Logo & Branding Startup' },
-                { img: 'https://picsum.photos/seed/desain2/400/300', title: 'Poster Acara Musik' },
-                { img: 'https://picsum.photos/seed/desain3/400/300', title: 'UI/UX Aplikasi Mobile' }
-            ],
-            'Virtual Tour': [
-                { img: 'https://picsum.photos/seed/vt1/400/300', title: 'Museum 360°' },
-                { img: 'https://picsum.photos/seed/vt2/400/300', title: 'Tur Properti Real Estate' }
-            ]
-        };
+        function handleLetterClick(el, char) {
+            // Mainkan suara
+            // Membedakan nada I pertama dan I kedua secara otomatis
+            let note = notes[char];
+            if (char === 'I' && currentSpelling.includes('I')) note = notes['I2'];
+            playGuitarNote(note);
 
-        // --- 4. LOGIKA NAVIGASI ---
-        function loadContent(category) {
-            document.getElementById('hero').style.display = 'none';
-            const contentSec = document.getElementById('content-section');
-            contentSec.style.display = 'block';
-            
-            document.getElementById('section-title').innerText = category;
-            
-            const gallery = document.getElementById('gallery-container');
-            gallery.innerHTML = ''; // Bersihkan konten lama
-            
-            // Loop data untuk membuat card portofolio
-            portfolioData[category].forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <img src="${item.img}" alt="${item.title}">
-                    <div class="card-info">${item.title}</div>
-                `;
-                gallery.appendChild(card);
+            // Tambah efek cahaya (glow)
+            el.classList.add('glow');
+
+            setTimeout(() => {
+                // Sembunyikan huruf yang berhamburan
+                el.style.display = 'none';
+
+                // Isi ke slot berikutnya
+                let slotIndex = currentSpelling.length;
+                if (slotIndex < targetWord.length) {
+                    document.getElementById('slot-' + slotIndex).innerText = char;
+                    currentSpelling += char;
+                }
+
+                // Cek apakah sudah 7 huruf
+                if (currentSpelling.length === targetWord.length) {
+                    if (currentSpelling === targetWord) {
+                        // BENAR! Buka Website
+                        setTimeout(unlockWebsite, 500);
+                    } else {
+                        // SALAH! Reset
+                        setTimeout(() => {
+                            alert('Susunan salah, coba lagi!');
+                            resetGame();
+                        }, 500);
+                    }
+                }
+            }, 200);
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        function unlockWebsite() {
+            document.getElementById('intro-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('intro-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('fab-container').style.display = 'flex';
+            }, 500);
+        }
+
+        // Mulai Game saat pertama kali dimuat
+        window.onload = initGame;
+
+
+        // --- LOGIKA FILTER PORTFOLIO ---
+        function filterData(category) {
+            const items = document.querySelectorAll('.card');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             });
-            
-            window.scrollTo(0,0);
         }
 
-        function showHero() {
-            document.getElementById('content-section').style.display = 'none';
-            document.getElementById('hero').style.display = 'flex';
-        }
-
-        // --- 5. LOGIKA MODAL (POP-UP) ---
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        // Tutup modal jika klik area luar kotak modal
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                event.target.style.display = 'none';
+        // --- LOGIKA SOSIAL MEDIA TOGGLE ---
+        function toggleSocial() {
+            const menu = document.getElementById('social-menu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'flex';
+            } else {
+                menu.style.display = 'none';
             }
+        }
+
+        // --- LOGIKA LIGHTBOX (Penampil Gambar, Video, PDF) ---
+        function openMedia(type, url) {
+            const container = document.getElementById('media-container');
+            container.innerHTML = ''; // Bersihkan kontainer
+
+            if (type === 'img') {
+                container.innerHTML = `<img src="${url}" alt="Full Media">`;
+            } else if (type === 'video') {
+                container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Browser Anda tidak mendukung video.</video>`;
+            } else if (type === 'pdf') {
+                container.innerHTML = `<iframe src="${url}"></iframe>`;
+            }
+
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeMedia() {
+            document.getElementById('media-container').innerHTML = ''; // Hentikan video/audio saat ditutup
+            document.getElementById('lightbox').style.display = 'none';
         }
     </script>
 </body>
