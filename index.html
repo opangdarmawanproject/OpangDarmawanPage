@@ -104,8 +104,10 @@
         }
         #close-modal:hover { background: #ffff00; color: #000; }
         .media-content-container { width: 90%; height: 85%; display: flex; justify-content: center; align-items: center; position: relative; }
+        
+        /* Modifikasi max-width dari 500px jadi 1000px agar Sketchfab & E-Katalog bisa lebar */
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
-        .media-content-container iframe { width: 100%; max-width: 500px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
+        .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
     </style>
 </head>
 <body>
@@ -207,7 +209,7 @@
         });
 
         /* ----------------------------------------------------
-           2. DATA KONTEN
+           2. DATA KONTEN PORTFOLIO
         ---------------------------------------------------- */
         const portfolioData = {
             "Fotografi": [
@@ -235,16 +237,15 @@
                     items: [
                         { title: "Hutan Purba 1", type: "img", src: "dino 1.jpg", cover: "dino 1.jpg" },
                         { title: "Hutan Purba 2", type: "img", src: "dino 2.jpg", cover: "dino 2.jpg" },
-                        { title: "Hutan Purba 3", type: "img", src: "dino 3.jpg", cover: "dino 3.jpg" } /* Typo diperbaiki disini */
+                        { title: "Hutan Purba 3", type: "img", src: "dino 3.jpg", cover: "dino 3.jpg" }
                     ]
                 }
             ],
             "Video": [
                 {
-                    title: "Video", 
+                    title: "Reels", 
                     cover: "Grading Video KAI.png",
                     items: [
-                        /* --- INI BAGIAN YANG DIPERBARUI UNTUK INSTAGRAM --- */
                         { 
                             title: "Klip 1 (Instagram)", 
                             type: "ig-video", 
@@ -252,27 +253,28 @@
                             cover: "Grading Video KAI.png" 
                         },
                         { 
-                            title: "Klip 1 (Instagram)", 
+                            title: "Klip 2 (Instagram)", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DSsWl99E2GZ/embed/", 
+                            src: "https://www.instagram.com/reel/DSsWl99E2GZ/embed/",  /* Link UTM sudah saya bersihkan */
                             cover: "Video arthandling.png" 
                         },
                         { 
-                            title: "Klip 1 (Instagram)", 
+                            title: "Klip 3 (Instagram)", 
                             type: "ig-video", 
                             src: "https://www.instagram.com/reel/DWJcNzGiRvN/embed/", 
                             cover: "Grading Video KAI.png" 
                         },
                     ]
                 },
-                { title: "Vlog / Dokumenter", cover: "https://picsum.photos/400/300?random=13", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
-                { title: "Shorts", cover: "https://picsum.photos/400/300?random=14", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
+                { title: "Youtube", cover: "https://picsum.photos/400/300?random=13", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
+                { title: "Event", cover: "https://picsum.photos/400/300?random=14", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
             "Desain": [
                 {
-                    title: "Brosur / PDF", 
+                    title: "E-Katalog", 
                     cover: "https://picsum.photos/400/300?random=15",
                     items: [
+                        /* Type 'pdf' akan merender file ke dalam tag iframe */
                         { title: "Katalog 1 (PDF)", type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", cover: "https://picsum.photos/400/300?random=15" },
                         { title: "Poster 1", type: "img", src: "https://picsum.photos/1200/800?random=16", cover: "https://picsum.photos/400/300?random=16" },
                         { title: "Poster 2", type: "img", src: "https://picsum.photos/1200/800?random=17", cover: "https://picsum.photos/400/300?random=17" }
@@ -286,7 +288,13 @@
                     title: "Karakter", 
                     cover: "https://picsum.photos/400/300?random=20",
                     items: [
-                        { title: "Model 1", type: "img", src: "https://picsum.photos/1200/800?random=20", cover: "https://picsum.photos/400/300?random=20" },
+                        /* --- CONTOH PENAMBAHAN SKETCHFAB --- */
+                        { 
+                            title: "Model 3D (Sketchfab)", 
+                            type: "sketchfab", 
+                            src: "https://sketchfab.com/models/894c25f44da240b98eb53f3e1b7f0f62/embed", /* Pastikan selalu ada ujung /embed */
+                            cover: "https://picsum.photos/400/300?random=20" 
+                        },
                         { title: "Model 2", type: "img", src: "https://picsum.photos/1200/800?random=21", cover: "https://picsum.photos/400/300?random=21" },
                         { title: "Model 3", type: "img", src: "https://picsum.photos/1200/800?random=22", cover: "https://picsum.photos/400/300?random=22" }
                     ]
@@ -350,7 +358,7 @@
         renderSubCategories(currentActiveCategory);
 
         /* ----------------------------------------------------
-           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG)
+           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / SKETCHFAB)
         ---------------------------------------------------- */
         const modal = document.getElementById('media-modal');
         const mediaContent = document.getElementById('media-content');
@@ -365,10 +373,13 @@
             } else if (type === 'video') {
                 mediaContent.innerHTML = `<video src="${src}" controls autoplay></video>`;
             } else if (type === 'ig-video') {
-                // Render iframe untuk Instagram
                 mediaContent.innerHTML = `<iframe src="${src}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`;
             } else if (type === 'pdf') {
-                mediaContent.innerHTML = `<iframe src="${src}"></iframe>`;
+                /* Pembaca PDF bawaan HTML5 */
+                mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
+            } else if (type === 'sketchfab') {
+                /* Mesin Pemutar 3D untuk sketchfab */
+                mediaContent.innerHTML = `<iframe title="3D model" src="${src}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
             }
         }
 
