@@ -107,7 +107,7 @@
         
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
         
-        /* Default Iframe Width (eMisal PDF & Sketchfab) */
+        /* Default Iframe Width (eMisal PDF & Sketchfab & YouTube) */
         .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
         
         /* Iframe Khusus Instagram Reels (Rasio Vertikal) */
@@ -253,25 +253,39 @@
                         { 
                             title: "Grading video KAI 2026", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DWJcNzGiRvN/", // Format Bebas
+                            src: "https://www.instagram.com/reel/DWJcNzGiRvN/", 
                             cover: "Grading Video KAI.png" 
                         },
                         { 
                             title: "Serial Dokumenter", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DQx0oG4EoON/?igsh=MXVvbngxdHZlOXc4ZQ%3D%3D/", // Format Bebas
+                            src: "https://www.instagram.com/reel/DQx0oG4EoON/?igsh=MXVvbngxdHZlOXc4ZQ%3D%3D/", 
                             cover: "Video arthandling.png" 
                         },
                         { 
                             title: "Travel Vlog", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DQiR8j2DHDD/?igsh=dDc4dXNydTR4NmYw", // Ada Parameter Tracking (Bebas)
+                            src: "https://www.instagram.com/reel/DQiR8j2DHDD/?igsh=dDc4dXNydTR4NmYw", 
                             cover: "Travel Vlog.png" 
                         },
                     ]
                 },
-                { title: "Music Video", cover: "MEGATRUH.png", items: [{title:"MEGATRUH", type:"img", src:"https://youtu.be/goXZUdqgouI?si=xiGeThdctmT6XYiY", cover:"MEGATRUH.png"}] },
-                { title: "Podcast/Talk", cover: "Podcast.png", items: [{title:"Undang Petani", type:"img", src:"https://youtu.be/S9Ruz5BBzSU?si=enji6zDTHnpF6_bT", cover:"Podcast.png"}] }
+                { 
+                    title: "Music Video", 
+                    cover: "MEGATRUH.png", 
+                    items: [
+                        // DIPERBARUI: type diubah menjadi 'youtube'
+                        {title:"MEGATRUH", type:"youtube", src:"https://youtu.be/goXZUdqgouI?si=xiGeThdctmT6XYiY", cover:"MEGATRUH.png"}
+                    ] 
+                },
+                { 
+                    title: "Podcast/Talk", 
+                    cover: "Podcast.png", 
+                    items: [
+                        // DIPERBARUI: type diubah menjadi 'youtube'
+                        {title:"Undang Petani", type:"youtube", src:"https://youtu.be/S9Ruz5BBzSU?si=enji6zDTHnpF6_bT", cover:"Podcast.png"}
+                    ] 
+                }
             ],
             "Desain": [
                 {
@@ -360,28 +374,33 @@
         renderSubCategories(currentActiveCategory);
 
         /* ----------------------------------------------------
-           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / SKETCHFAB)
+           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / YT / SKETCHFAB)
         ---------------------------------------------------- */
         const modal = document.getElementById('media-modal');
         const mediaContent = document.getElementById('media-content');
         const closeModalBtn = document.getElementById('close-modal');
 
-        // FUNGSI BARU: Membersihkan link IG dan mengubahnya otomatis menjadi '/embed/'
+        // Fungsi Pembersih URL IG
         function formatIgUrl(rawUrl) {
-            // Hilangkan semua teks setelah tanda tanya (?)
             let cleanUrl = rawUrl.split('?')[0];
-            
-            // Pastikan URL diakhiri dengan garis miring (/)
-            if (!cleanUrl.endsWith('/')) {
-                cleanUrl += '/';
-            }
-            
-            // Pastikan ujung URL adalah embed/
-            if (!cleanUrl.endsWith('embed/')) {
-                cleanUrl += 'embed/';
-            }
-            
+            if (!cleanUrl.endsWith('/')) { cleanUrl += '/'; }
+            if (!cleanUrl.endsWith('embed/')) { cleanUrl += 'embed/'; }
             return cleanUrl;
+        }
+
+        // FUNGSI BARU: Mengambil ID YouTube dan mengubahnya jadi pemutar otomatis (Embed)
+        function formatYouTubeUrl(rawUrl) {
+            let videoId = "";
+            
+            // Cek format link (bisa youtu.be atau youtube.com/watch)
+            if (rawUrl.includes("youtu.be/")) {
+                videoId = rawUrl.split("youtu.be/")[1].split("?")[0];
+            } else if (rawUrl.includes("youtube.com/watch?v=")) {
+                videoId = rawUrl.split("v=")[1].split("&")[0];
+            }
+            
+            // Mengembalikan link embed dengan parameter autoplay
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
         }
 
         function openMediaModal(type, src) {
@@ -393,14 +412,15 @@
             } else if (type === 'video') {
                 mediaContent.innerHTML = `<video src="${src}" controls autoplay muted playsinline></video>`;
             } else if (type === 'ig-video') {
-                // Panggil fungsi format link sebelum memutar video
                 const finalUrl = formatIgUrl(src);
-                
-                // Tambahkan parameter autoplay=1 (pemaksaan pada iframe)
                 const autoPlaySrc = finalUrl + '?autoplay=1';
-                
-                // Menambahkan class="ig-iframe" agar ukuran video sesuai bentuk Reels (vertikal)
                 mediaContent.innerHTML = `<iframe class="ig-iframe" src="${autoPlaySrc}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media"></iframe>`;
+            
+            // LOGIKA BARU: Khusus YouTube Video
+            } else if (type === 'youtube') {
+                const ytEmbedUrl = formatYouTubeUrl(src);
+                mediaContent.innerHTML = `<iframe src="${ytEmbedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            
             } else if (type === 'pdf') {
                 mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
             } else if (type === 'sketchfab') {
