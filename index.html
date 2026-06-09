@@ -1,279 +1,407 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Retro Pop Portfolio</title>
-<style>
-    /* ----- GAYA UMUM (RETRO POP) ----- */
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Righteous&display=swap');
-    
-    body, html { margin: 0; padding: 0; height: 100%; background-color: #110022; color: #fff; font-family: 'Righteous', cursive; overflow-x: hidden; }
-    
-    /* ----- HALAMAN INTRO ----- */
-    #intro-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #2b00ff, #ff007f); z-index: 100; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; }
-    #scatter-area { position: absolute; top: 0; left: 0; width: 100%; height: 80%; }
-    .letter { position: absolute; font-family: 'Press Start 2P', monospace; font-size: 3rem; color: #fff; cursor: pointer; user-select: none; transition: transform 0.2s, text-shadow 0.2s; }
-    .letter:hover { transform: scale(1.2); }
-    .letter.glow { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff; color: #ffff00; }
-    
-    #target-area { display: flex; gap: 15px; margin-bottom: 50px; z-index: 10; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 10px; border: 3px dashed #0ff; }
-    .slot { width: 50px; height: 50px; border-bottom: 5px solid #ffcc00; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-family: 'Press Start 2P', monospace; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Pop Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ================= CSS VARIABEL & RESET ================= */
+        :root {
+            --neon-pink: #FF007F;
+            --neon-cyan: #00F0FF;
+            --neon-yellow: #FFE600;
+            --neon-purple: #8A2BE2;
+            --bg-dark: #121212;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
 
-    /* ----- HALAMAN UTAMA ----- */
-    #main-screen { display: none; min-height: 100vh; background: #110022; background-image: radial-gradient(#ff007f 1px, transparent 1px), radial-gradient(#00f3ff 1px, transparent 1px); background-size: 40px 40px; background-position: 0 0, 20px 20px; padding: 20px; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #ff007f; border: 4px solid #0ff; box-shadow: 8px 8px 0px #00f3ff; margin-bottom: 30px; }
-    header h1 { margin: 0; font-size: 2.5rem; text-shadow: 3px 3px 0 #ffff00; letter-spacing: 2px; }
-    
-    .btn-retro { background: #ffff00; color: #110022; border: 3px solid #110022; padding: 10px 20px; font-family: 'Righteous', cursive; font-size: 1.2rem; cursor: pointer; box-shadow: 4px 4px 0px #ff007f; transition: all 0.1s; text-transform: uppercase; }
-    .btn-retro:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px; }
+        /* ================= HALAMAN ENTRY 'PERMISI' ================= */
+        #entry-gate {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle, #2a0845 0%, #000000 100%);
+            z-index: 9999;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+            transition: opacity 1s ease-out;
+        }
+        .scattered-letter {
+            position: absolute;
+            font-family: 'Righteous', cursive;
+            font-size: 5rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.5s ease;
+        }
+        .scattered-letter:hover { color: var(--neon-cyan); transform: scale(1.2); }
+        #dock {
+            display: flex; gap: 10px; margin-bottom: 50px;
+            min-height: 80px; padding: 10px;
+            border-bottom: 3px dashed var(--neon-cyan);
+        }
+        .docked-letter {
+            font-family: 'Righteous', cursive;
+            font-size: 4rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+        .hint-text {
+            position: absolute; top: 20px; font-family: 'Righteous'; color: var(--neon-pink);
+            letter-spacing: 2px; text-shadow: 0 0 5px var(--neon-pink);
+        }
 
-    /* Menu & Kolam */
-    .menu-bar { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-    #content-area { display: flex; flex-direction: column; gap: 20px; }
-    .kolam-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-    .kolam { flex: 1; min-width: 250px; background: #220044; border: 4px solid #ff007f; padding: 30px; text-align: center; cursor: pointer; box-shadow: 5px 5px 0 #00f3ff; transition: 0.2s; }
-    .kolam:hover { background: #ff007f; border-color: #ffff00; box-shadow: 5px 5px 0 #ffff00; }
-    .kolam h3 { margin: 0; font-size: 1.5rem; }
+        /* ================= HALAMAN UTAMA (MAIN SITE) ================= */
+        #main-site { display: none; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        
+        /* Navigasi */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 0; border-bottom: 4px solid var(--neon-pink);
+            margin-bottom: 30px;
+        }
+        .logo { font-family: 'Righteous', cursive; font-size: 2.5rem; color: var(--neon-yellow); text-shadow: 2px 2px 0px var(--neon-purple); }
+        nav { display: flex; gap: 15px; flex-wrap: wrap; }
+        button {
+            background: transparent; color: white; font-family: 'Righteous', cursive;
+            font-size: 1.2rem; border: 2px solid var(--neon-cyan); padding: 8px 16px;
+            cursor: pointer; transition: 0.3s;
+            text-transform: uppercase;
+        }
+        button:hover, .active-btn { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+        
+        .btn-kontak { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+        .btn-kontak:hover { background: var(--neon-yellow); color: #000; box-shadow: 0 0 15px var(--neon-yellow); }
 
-    /* Social Dropdown */
-    .social-dropdown { position: relative; display: inline-block; }
-    .social-content { display: none; position: absolute; right: 0; top: 50px; background-color: #00f3ff; min-width: 200px; box-shadow: 5px 5px 0 #ff007f; border: 3px solid #110022; z-index: 1; }
-    .social-content a { color: #110022; padding: 12px 16px; text-decoration: none; display: block; font-weight: bold; border-bottom: 2px dashed #110022; }
-    .social-content a:hover { background-color: #ffff00; }
+        /* Sosial Media Modal */
+        #social-modal {
+            display: none; background: rgba(0,0,0,0.9); border: 2px solid var(--neon-pink);
+            padding: 20px; position: absolute; right: 20px; top: 80px; z-index: 100;
+            box-shadow: 0 0 20px var(--neon-pink); text-align: center;
+        }
+        .social-link {
+            display: block; color: var(--neon-cyan); text-decoration: none;
+            margin: 10px 0; font-size: 1.2rem; font-weight: bold;
+        }
+        .social-link:hover { color: var(--neon-yellow); }
 
-    /* ----- MEDIA VIEWER (FULLSCREEN) ----- */
-    #media-viewer { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
-    #viewer-content { width: 80%; height: 80%; display: flex; justify-content: center; align-items: center; }
-    #viewer-content img, #viewer-content video { max-width: 100%; max-height: 100%; border: 5px solid #ff007f; box-shadow: 0 0 30px #0ff; }
-    #viewer-content iframe { width: 100%; height: 100%; border: 5px solid #00f3ff; box-shadow: 0 0 30px #ff007f; }
-    .close-btn { position: absolute; top: 20px; right: 40px; font-size: 4rem; color: #ff007f; cursor: pointer; font-family: sans-serif; text-shadow: 0 0 10px #ff007f; transition: 0.2s; }
-    .close-btn:hover { color: #ffff00; }
-</style>
+        /* Area Konten Dinamis (Kolam/Grid) */
+        .breadcrumb { margin-bottom: 20px; color: var(--neon-pink); font-size: 1.2rem; font-weight: bold; cursor: pointer;}
+        .grid-3 {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .card {
+            background: #222; border: 3px solid var(--neon-purple); padding: 20px;
+            text-align: center; cursor: pointer; transition: 0.3s; position: relative;
+            min-height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .card:hover {
+            transform: translateY(-10px); border-color: var(--neon-pink);
+            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.4);
+        }
+        .card h3 { font-family: 'Righteous', cursive; font-size: 1.5rem; letter-spacing: 1px;}
+        .card-cover { width: 100%; height: 100px; object-fit: cover; margin-bottom: 15px; border: 1px solid #555; }
+
+        /* ================= LIGHTBOX (VIEWER MEDIA) ================= */
+        #lightbox {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        #lb-close {
+            position: absolute; top: 20px; right: 30px; background: transparent; border: none;
+            color: var(--neon-pink); font-size: 3rem; font-family: 'Righteous'; cursor: pointer;
+        }
+        #lb-close:hover { color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); }
+        #lb-content-area { width: 90%; height: 80%; display: flex; justify-content: center; align-items: center; }
+        .lb-media { max-width: 100%; max-height: 100%; border: 3px solid var(--neon-cyan); box-shadow: 0 0 30px var(--neon-cyan); }
+        iframe.lb-media { width: 100%; height: 100%; background: white; }
+
+        @media (max-width: 768px) {
+            .grid-3 { grid-template-columns: 1fr; }
+            .scattered-letter { font-size: 3rem; }
+            .docked-letter { font-size: 2.5rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <h2 style="position: absolute; top: 20px; color: #fff; text-shadow: 2px 2px 0 #000; font-family: sans-serif;">Klik huruf secara berurutan untuk menyusun "PERMISI"</h2>
+    <div id="entry-gate">
+        <h2 class="hint-text">Klik huruf berhamburan untuk menyusun: PERMISI</h2>
         <div id="scatter-area"></div>
-        <div id="target-area">
-            <div class="slot" id="slot-0"></div><div class="slot" id="slot-1"></div>
-            <div class="slot" id="slot-2"></div><div class="slot" id="slot-3"></div>
-            <div class="slot" id="slot-4"></div><div class="slot" id="slot-5"></div>
-            <div class="slot" id="slot-6"></div>
-        </div>
+        <div id="dock"></div>
     </div>
 
-    <div id="main-screen">
+    <div id="main-site">
         <header>
-            <h1>Opang Darmawan</h1>
-            <div class="social-dropdown">
-                <button class="btn-retro" onclick="toggleSocial()">Kontak & Sosmed ▼</button>
-                <div id="social-menu" class="social-content">
-                    <a href="https://wa.me/6281234567890" target="_blank">🟢 WhatsApp</a>
-                    <a href="#" target="_blank">🟣 Instagram</a>
-                    <a href="#" target="_blank">🔵 Facebook</a>
-                </div>
-            </div>
+            <div class="logo">KREASI POP</div>
+            <nav id="main-nav">
+                <button onclick="loadCategory('Fotografi')">Fotografi</button>
+                <button onclick="loadCategory('Video')">Video</button>
+                <button onclick="loadCategory('Desain')">Desain</button>
+                <button onclick="loadCategory('3Ddesain')">3Ddesain</button>
+                <button class="btn-kontak" onclick="toggleSocial()">Kontak</button>
+            </nav>
         </header>
 
-        <div class="menu-bar">
-            <button class="btn-retro" onclick="loadKategori('Fotografi')">Fotografi</button>
-            <button class="btn-retro" onclick="loadKategori('Video')">Video</button>
-            <button class="btn-retro" onclick="loadKategori('Desain')">Desain</button>
-            <button class="btn-retro" onclick="loadKategori('3D Desain')">3D Desain</button>
+        <div id="social-modal">
+            <a href="https://wa.me/1234567890" target="_blank" class="social-link">WhatsApp</a>
+            <a href="https://instagram.com" target="_blank" class="social-link">Instagram</a>
+            <a href="https://twitter.com" target="_blank" class="social-link">Twitter / X</a>
         </div>
 
-        <div id="content-area">
-            <h2 id="judul-kategori" style="text-align:center; color:#0ff; text-shadow: 2px 2px #ff007f;">Pilih Kategori Di Atas</h2>
-            <div id="kolam-utama" class="kolam-container"></div>
-        </div>
+        <main>
+            <div id="breadcrumb" class="breadcrumb" onclick="goBack()" style="display:none;">&larr; Kembali</div>
+            <div id="content-grid" class="grid-3">
+                </div>
+        </main>
     </div>
 
-    <div id="media-viewer">
-        <span class="close-btn" onclick="closeViewer()">&times;</span>
-        <div id="viewer-content"></div>
+    <div id="lightbox">
+        <button id="lb-close" onclick="closeLightbox()">X</button>
+        <div id="lb-content-area"></div>
     </div>
 
-<script>
-    /* ================= LOGIKA INTRO (PERMISI) ================= */
-    const kataKunci = "PERMISI";
-    const scatterArea = document.getElementById('scatter-area');
-    let currentIndex = 0;
-
-    // Web Audio API untuk Suara Gitar (Sintesis Suara)
-    function playGuitarSound(pitchIndex) {
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gainNode = ctx.createGain();
+    <script>
+        /* ================= 1. AUDIO SYNTHESIZER (SUARA GITAR) ================= */
+        let audioCtx;
+        function playGuitar(freq) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             
-            // Frekuensi nada dasar (P-E-R-M-I-S-I disimulasikan seperti senar gitar)
-            const freqs = [329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33]; 
-            osc.type = 'sawtooth'; // Karakter suara mirip senar
-            osc.frequency.setValueAtTime(freqs[pitchIndex % freqs.length], ctx.currentTime);
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'triangle'; // Mirip petikan senar
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
             
             osc.connect(gainNode);
-            gainNode.connect(ctx.destination);
+            gainNode.connect(audioCtx.destination);
             
             osc.start();
-            gainNode.gain.setValueAtTime(1, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1); // Fading suara
-            osc.stop(ctx.currentTime + 1);
-        } catch(e) { console.log("Audio not supported"); }
-    }
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
 
-    function initIntro() {
-        // Acak huruf di layar
-        let hurufArr = kataKunci.split('');
-        // Shuffle manual agar posisi di DOM tidak berurutan
-        let shuffled = hurufArr.map((val, ind) => ({val, ind})).sort(() => Math.random() - 0.5);
-        
-        scatterArea.innerHTML = '';
-        shuffled.forEach((obj) => {
-            let span = document.createElement('span');
-            span.className = 'letter';
-            span.innerText = obj.val;
-            span.dataset.targetChar = obj.val;
+        // Nada untuk P-E-R-M-I-S-I
+        const frequencies = { 'P': 164.81, 'E': 220.00, 'R': 293.66, 'M': 392.00, 'I': 493.88, 'S': 659.25, 'I2': 880.00 };
+
+        /* ================= 2. LOGIKA ENTRY GATE 'PERMISI' ================= */
+        const word = "PERMISI";
+        const scatterArea = document.getElementById('scatter-area');
+        const dock = document.getElementById('dock');
+        let currentLetterIndex = 0;
+
+        // Inisialisasi huruf berhamburan
+        function initGate() {
+            let lettersArray = word.split('');
+            // Acak urutan huruf di layar
+            let shuffled = [...lettersArray].sort(() => Math.random() - 0.5);
             
-            // Posisi acak
-            span.style.top = Math.floor(Math.random() * 70 + 10) + '%';
-            span.style.left = Math.floor(Math.random() * 80 + 10) + '%';
+            shuffled.forEach((char, index) => {
+                let span = document.createElement('span');
+                span.textContent = char;
+                span.className = 'scattered-letter';
+                // Posisi acak di layar (menghindari tepi layar)
+                span.style.top = Math.floor(Math.random() * 60 + 10) + '%';
+                span.style.left = Math.floor(Math.random() * 80 + 10) + '%';
+                
+                span.onclick = () => handleLetterClick(span, char);
+                scatterArea.appendChild(span);
+            });
+        }
+
+        function handleLetterClick(element, char) {
+            const expectedChar = word[currentLetterIndex];
             
-            span.onclick = function() {
-                if(this.dataset.targetChar === kataKunci[currentIndex]) {
-                    // Benar
-                    playGuitarSound(currentIndex);
-                    this.classList.add('glow');
-                    
-                    // Pindahkan ke slot target
-                    let slot = document.getElementById('slot-' + currentIndex);
-                    slot.innerText = this.innerText;
-                    slot.style.textShadow = "0 0 20px #0ff";
-                    this.style.display = 'none'; // Sembunyikan yang diacak
-                    
-                    currentIndex++;
-                    
-                    if(currentIndex === kataKunci.length) {
-                        setTimeout(() => {
-                            document.getElementById('intro-screen').style.display = 'none';
-                            document.getElementById('main-screen').style.display = 'block';
-                        }, 800); // Jeda sebelum masuk halaman utama
-                    }
-                } else {
-                    // Salah klik urutan (Reset)
-                    alert('Urutan salah! Ingat kata: PERMISI');
-                    currentIndex = 0;
-                    for(let i=0; i<kataKunci.length; i++) {
-                        document.getElementById('slot-'+i).innerText = '';
-                    }
-                    initIntro(); // Acak ulang
+            if (char === expectedChar) {
+                // Mainkan nada gitar yang semakin tinggi
+                let freqKey = (char === 'I' && currentLetterIndex === 6) ? 'I2' : char;
+                playGuitar(frequencies[freqKey] || 440);
+
+                // Pindahkan ke dock
+                element.style.display = 'none';
+                let dockedChar = document.createElement('span');
+                dockedChar.textContent = char;
+                dockedChar.className = 'docked-letter';
+                dock.appendChild(dockedChar);
+                
+                currentLetterIndex++;
+                
+                if (currentLetterIndex === word.length) {
+                    setTimeout(unlockSite, 800); // Buka situs setelah selesai
                 }
-            };
-            scatterArea.appendChild(span);
-        });
-    }
-    
-    // Jalankan Intro
-    initIntro();
-
-    /* ================= LOGIKA HALAMAN UTAMA & KOLAM ================= */
-    function toggleSocial() {
-        let menu = document.getElementById("social-menu");
-        menu.style.display = (menu.style.display === "block") ? "none" : "block";
-    }
-
-    // Data Dummy untuk Media Viewer
-    // Kamu bisa ganti URL ini dengan link gambar, video, atau PDF aslimu.
-    const mediaLinks = {
-        'Fotografi': { type: 'img', url: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' },
-        'Video': { type: 'video', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-        'Desain': { type: 'img', url: 'https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' },
-        '3D Desain': { type: 'pdf', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' }
-    };
-
-    function loadKategori(nama) {
-        document.getElementById('judul-kategori').innerText = "Kategori: " + nama;
-        let kolamUtama = document.getElementById('kolam-utama');
-        kolamUtama.innerHTML = '';
-
-        // Generate 3 Kolam Utama
-        for(let i = 1; i <= 3; i++) {
-            let kUtama = document.createElement('div');
-            kUtama.className = 'kolam';
-            kUtama.innerHTML = `<h3>${nama} - Bagian ${i}</h3><p>Klik untuk melihat isi</p>`;
-            
-            // Jika diklik, tampilkan 3 sub-kolam di bawahnya
-            kUtama.onclick = function() {
-                loadSubKolam(kUtama, nama, i);
-            };
-            kolamUtama.appendChild(kUtama);
-        }
-    }
-
-    function loadSubKolam(parentDiv, namaKategori, indexUtama) {
-        // Hapus sub-kolam yang mungkin sudah terbuka di tempat lain untuk menjaga kerapian
-        document.querySelectorAll('.sub-container').forEach(el => el.remove());
-
-        let subContainer = document.createElement('div');
-        subContainer.className = 'kolam-container sub-container';
-        subContainer.style.marginTop = '20px';
-        subContainer.style.width = '100%';
-
-        // Generate 3 Sub Kolam
-        for(let j = 1; j <= 3; j++) {
-            let subKolam = document.createElement('div');
-            subKolam.className = 'kolam';
-            subKolam.style.background = '#00f3ff';
-            subKolam.style.color = '#110022';
-            subKolam.style.borderColor = '#ffff00';
-            subKolam.innerHTML = `<h3>Item ${j}</h3><p>Lihat Media</p>`;
-            
-            // Jika diklik, buka Media Viewer
-            subKolam.onclick = function(e) {
-                e.stopPropagation(); // Mencegah klik men-trigger parent
-                openViewer(mediaLinks[namaKategori].type, mediaLinks[namaKategori].url);
-            };
-            subContainer.appendChild(subKolam);
-        }
-        parentDiv.appendChild(subContainer);
-    }
-
-    /* ================= LOGIKA MEDIA VIEWER ================= */
-    const viewer = document.getElementById('media-viewer');
-    const viewerContent = document.getElementById('viewer-content');
-
-    function openViewer(type, url) {
-        viewerContent.innerHTML = ''; // Bersihkan isi sebelumnya
-        viewer.style.display = 'flex';
-
-        if (type === 'img') {
-            viewerContent.innerHTML = `<img src="${url}" alt="Image Viewer">`;
-        } else if (type === 'video') {
-            viewerContent.innerHTML = `<video src="${url}" controls autoplay></video>`;
-        } else if (type === 'pdf') {
-            // Menggunakan Iframe untuk menampilkan PDF
-            viewerContent.innerHTML = `<iframe src="${url}"></iframe>`;
-        }
-    }
-
-    function closeViewer() {
-        viewer.style.display = 'none';
-        viewerContent.innerHTML = ''; // Hentikan video/audio saat ditutup
-    }
-
-    // Tutup dropdown jika user klik di luar area sosial media
-    window.onclick = function(event) {
-        if (!event.target.matches('.btn-retro') && !event.target.closest('.social-dropdown')) {
-            let dropdowns = document.getElementsByClassName("social-content");
-            for (let i = 0; i < dropdowns.length; i++) {
-                let openDropdown = dropdowns[i];
-                if (openDropdown.style.display === "block") {
-                    openDropdown.style.display = "none";
-                }
+            } else {
+                // Jika salah klik, getar/efek error (opsional: suara sumbang)
+                element.style.transform = "translateX(10px)";
+                setTimeout(() => element.style.transform = "scale(1)", 200);
             }
         }
-    }
-</script>
+
+        function unlockSite() {
+            document.getElementById('entry-gate').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('entry-gate').style.display = 'none';
+                document.getElementById('main-site').style.display = 'block';
+                loadCategory('Fotografi'); // Muat kategori awal
+            }, 1000);
+        }
+
+        initGate();
+
+        /* ================= 3. LOGIKA KONTEN UTAMA & KOLAM (GRIDS) ================= */
+        // Struktur Data (3 Kolom Utama -> 3 Kolom Sub/Media)
+        const db = {
+            "Fotografi": [
+                { title: "Fotografi Ai", cover: "https://placehold.co/400x300/FF007F/FFF?text=AI+Cover", items: [
+                    { type: "img", src: "https://placehold.co/800x600/FF007F/FFF?text=AI+Foto+1", title: "AI Karya 1" },
+                    { type: "img", src: "https://placehold.co/800x600/00F0FF/000?text=AI+Foto+2", title: "AI Karya 2" },
+                    { type: "img", src: "https://placehold.co/800x600/FFE600/000?text=AI+Foto+3", title: "AI Karya 3" }
+                ]},
+                { title: "Fotografi Kamera", cover: "https://placehold.co/400x300/00F0FF/000?text=Kamera+Cover", items: [
+                    { type: "img", src: "https://placehold.co/800x600/222/FFF?text=Foto+Kamera+1", title: "Jepretan 1" },
+                    { type: "img", src: "https://placehold.co/800x600/333/FFF?text=Foto+Kamera+2", title: "Jepretan 2" },
+                    { type: "img", src: "https://placehold.co/800x600/444/FFF?text=Foto+Kamera+3", title: "Jepretan 3" }
+                ]},
+                { title: "Di Balik Layar", cover: "https://placehold.co/400x300/FFE600/000?text=BTS+Cover", items: [
+                    { type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", title: "Jurnal Pemotretan (PDF)" },
+                    { type: "img", src: "https://placehold.co/800x600/666/FFF?text=BTS+1", title: "BTS 1" },
+                    { type: "img", src: "https://placehold.co/800x600/777/FFF?text=BTS+2", title: "BTS 2" }
+                ]}
+            ],
+            "Video": [
+                { title: "Klip Musik", cover: "https://placehold.co/400x300/8A2BE2/FFF?text=Klip+Musik", items: [
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Video Klip 1" },
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Video Klip 2" },
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Video Klip 3" }
+                ]},
+                { title: "Iklan Komersial", cover: "https://placehold.co/400x300/FF007F/FFF?text=Iklan", items: [ /* Isi serupa */ ] },
+                { title: "Dokumenter", cover: "https://placehold.co/400x300/00F0FF/000?text=Dokumenter", items: [ /* Isi serupa */ ] }
+            ],
+            "Desain": [
+                { title: "Poster Retro", cover: "https://placehold.co/400x300/FFE600/000?text=Poster+Retro", items: [
+                    { type: "img", src: "https://placehold.co/800x1200/FFE600/000?text=Poster+1", title: "Poster 1" },
+                    { type: "img", src: "https://placehold.co/800x1200/FF007F/000?text=Poster+2", title: "Poster 2" },
+                    { type: "img", src: "https://placehold.co/800x1200/00F0FF/000?text=Poster+3", title: "Poster 3" }
+                ]},
+                { title: "Logo Bisnis", cover: "https://placehold.co/400x300/8A2BE2/FFF?text=Logo", items: [ /* Isi serupa */ ] },
+                { title: "Brosur (PDF)", cover: "https://placehold.co/400x300/222/FFF?text=Brosur", items: [
+                    { type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", title: "Brosur 1 (PDF)" },
+                    { type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", title: "Brosur 2 (PDF)" },
+                    { type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", title: "Brosur 3 (PDF)" }
+                ]}
+            ],
+            "3Ddesain": [
+                { title: "Karakter 3D", cover: "https://placehold.co/400x300/00F0FF/000?text=Karakter+3D", items: [
+                    { type: "img", src: "https://placehold.co/800x600/00F0FF/000?text=Karakter+1", title: "Karakter 1" },
+                    { type: "img", src: "https://placehold.co/800x600/FF007F/000?text=Karakter+2", title: "Karakter 2" },
+                    { type: "img", src: "https://placehold.co/800x600/FFE600/000?text=Karakter+3", title: "Karakter 3" }
+                ]},
+                { title: "Lingkungan/Environment", cover: "https://placehold.co/400x300/FF007F/FFF?text=Environment", items: [ /* Isi serupa */ ] },
+                { title: "Animasi 3D (Video)", cover: "https://placehold.co/400x300/8A2BE2/FFF?text=Animasi", items: [
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Render 1" },
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Render 2" },
+                    { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Render 3" }
+                ]}
+            ]
+        };
+
+        let currentCategory = '';
+        const grid = document.getElementById('content-grid');
+        const breadcrumb = document.getElementById('breadcrumb');
+
+        function loadCategory(catName) {
+            currentCategory = catName;
+            grid.innerHTML = '';
+            breadcrumb.style.display = 'none'; // Sembunyikan tombol kembali
+            
+            // Highlight Menu
+            document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active-btn'));
+            event.target.classList.add('active-btn');
+
+            let columns = db[catName];
+            if(!columns) return; // Jika kategori kosong (untuk demo)
+
+            columns.forEach((col, index) => {
+                let card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${col.cover}" class="card-cover" alt="Cover">
+                    <h3>${col.title}</h3>
+                `;
+                // Jika di klik, buka 3 sub-kolam/item media
+                card.onclick = () => loadSubItems(catName, index);
+                grid.appendChild(card);
+            });
+        }
+
+        function loadSubItems(catName, colIndex) {
+            grid.innerHTML = '';
+            breadcrumb.style.display = 'block'; // Tampilkan tombol kembali
+            breadcrumb.innerText = `← Kembali ke kategori ${catName}`;
+            
+            let items = db[catName][colIndex].items;
+            if(!items || items.length === 0) {
+                grid.innerHTML = '<h3 style="color:var(--neon-pink)">Konten belum tersedia di kolom ini.</h3>';
+                return;
+            }
+
+            items.forEach(item => {
+                let card = document.createElement('div');
+                card.className = 'card';
+                
+                // Menentukan ikon/cover berdasarkan tipe media
+                let coverTxt = item.type.toUpperCase();
+                let coverColor = item.type === 'pdf' ? 'FF0000/FFF' : (item.type === 'video' ? '8A2BE2/FFF' : '222/FFF');
+                
+                card.innerHTML = `
+                    <img src="https://placehold.co/400x300/${coverColor}?text=${coverTxt}" class="card-cover" alt="Tipe">
+                    <h3>${item.title}</h3>
+                `;
+                card.onclick = () => openLightbox(item.type, item.src);
+                grid.appendChild(card);
+            });
+        }
+
+        function goBack() {
+            loadCategory(currentCategory);
+        }
+
+        /* ================= 4. LOGIKA LAINNYA (Sosmed & Lightbox) ================= */
+        function toggleSocial() {
+            const modal = document.getElementById('social-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function openLightbox(type, src) {
+            const lb = document.getElementById('lightbox');
+            const contentArea = document.getElementById('lb-content-area');
+            contentArea.innerHTML = ''; // Bersihkan isi sebelumnya
+
+            if (type === 'img') {
+                contentArea.innerHTML = `<img src="${src}" class="lb-media">`;
+            } else if (type === 'video') {
+                contentArea.innerHTML = `<video src="${src}" class="lb-media" controls autoplay></video>`;
+            } else if (type === 'pdf') {
+                // Menggunakan iframe untuk menampilkan PDF secara native di browser
+                contentArea.innerHTML = `<iframe src="${src}" class="lb-media"></iframe>`;
+            }
+            
+            lb.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.getElementById('lb-content-area').innerHTML = ''; // Matikan video/audio
+        }
+    </script>
 </body>
 </html>
