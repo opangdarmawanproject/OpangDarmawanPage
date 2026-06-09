@@ -106,7 +106,12 @@
         .media-content-container { width: 90%; height: 85%; display: flex; justify-content: center; align-items: center; position: relative; }
         
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
+        
+        /* Default Iframe Width (eMisal PDF & Sketchfab) */
         .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
+        
+        /* Iframe Khusus Instagram Reels (Rasio Vertikal) */
+        .media-content-container iframe.ig-iframe { max-width: 450px; height: 90%; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -246,22 +251,22 @@
                     cover: "Grading Video KAI.png",
                     items: [
                         { 
-                            title: "Grading video KAI 2026 (Instagram)", 
+                            title: "Grading video KAI 2026", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DWJcNzGiRvN/embed/", 
+                            src: "https://www.instagram.com/reel/DWJcNzGiRvN/", // Format Bebas
                             cover: "Grading Video KAI.png" 
                         },
                         { 
-                            title: "Produksi kkonten ArtHandling (Instagram)", 
+                            title: "Produksi konten ArtHandling", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/serrum_arthandling/reel/DSsWl99E2GZ/embed/",  
+                            src: "https://www.instagram.com/serrum_arthandling/reel/DSsWl99E2GZ/", // Format Bebas
                             cover: "Video arthandling.png" 
                         },
                         { 
-                            title: "Travel Vlog (Instagram)", 
+                            title: "Travel Vlog", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/CfEuUqJDc78/?igsh=MW1kYnJjNGVtd2c3dg%3D%3D/embed/", 
-                            cover: "Grading Video KAI.png" 
+                            src: "https://www.instagram.com/reel/DQiR8j2DHDD/?igsh=dDc4dXNydTR4NmYw", // Ada Parameter Tracking (Bebas)
+                            cover: "Travel Vlog.png" 
                         },
                     ]
                 },
@@ -361,6 +366,24 @@
         const mediaContent = document.getElementById('media-content');
         const closeModalBtn = document.getElementById('close-modal');
 
+        // FUNGSI BARU: Membersihkan link IG dan mengubahnya otomatis menjadi '/embed/'
+        function formatIgUrl(rawUrl) {
+            // Hilangkan semua teks setelah tanda tanya (?)
+            let cleanUrl = rawUrl.split('?')[0];
+            
+            // Pastikan URL diakhiri dengan garis miring (/)
+            if (!cleanUrl.endsWith('/')) {
+                cleanUrl += '/';
+            }
+            
+            // Pastikan ujung URL adalah embed/
+            if (!cleanUrl.endsWith('embed/')) {
+                cleanUrl += 'embed/';
+            }
+            
+            return cleanUrl;
+        }
+
         function openMediaModal(type, src) {
             modal.style.display = 'flex';
             mediaContent.innerHTML = ''; 
@@ -368,12 +391,16 @@
             if (type === 'img') {
                 mediaContent.innerHTML = `<img src="${src}" alt="Full Media">`;
             } else if (type === 'video') {
-                // Diperbarui: Browser modern membutuhkan 'muted' dan 'playsinline' agar mengizinkan autoplay otomatis
                 mediaContent.innerHTML = `<video src="${src}" controls autoplay muted playsinline></video>`;
             } else if (type === 'ig-video') {
-                // Diperbarui: Menambahkan parameter ?autoplay=1 ke URL dan menambahkan atribut allow="autoplay" pada iframe
-                const autoPlaySrc = src.includes('?') ? src + '&autoplay=1' : src + '?autoplay=1';
-                mediaContent.innerHTML = `<iframe src="${autoPlaySrc}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media"></iframe>`;
+                // Panggil fungsi format link sebelum memutar video
+                const finalUrl = formatIgUrl(src);
+                
+                // Tambahkan parameter autoplay=1 (pemaksaan pada iframe)
+                const autoPlaySrc = finalUrl + '?autoplay=1';
+                
+                // Menambahkan class="ig-iframe" agar ukuran video sesuai bentuk Reels (vertikal)
+                mediaContent.innerHTML = `<iframe class="ig-iframe" src="${autoPlaySrc}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media"></iframe>`;
             } else if (type === 'pdf') {
                 mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
             } else if (type === 'sketchfab') {
