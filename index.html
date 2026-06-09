@@ -105,7 +105,6 @@
         #close-modal:hover { background: #ffff00; color: #000; }
         .media-content-container { width: 90%; height: 85%; display: flex; justify-content: center; align-items: center; position: relative; }
         
-        /* Modifikasi max-width dari 500px jadi 1000px agar Sketchfab & E-Katalog bisa lebar */
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
         .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
     </style>
@@ -255,7 +254,7 @@
                         { 
                             title: "Klip 2 (Instagram)", 
                             type: "ig-video", 
-                            src: "https://www.instagram.com/reel/DSsWl99E2GZ/embed/",  /* Link UTM sudah saya bersihkan */
+                            src: "https://www.instagram.com/reel/DSsWl99E2GZ/embed/",  
                             cover: "Video arthandling.png" 
                         },
                         { 
@@ -274,7 +273,6 @@
                     title: "E-Katalog", 
                     cover: "https://picsum.photos/400/300?random=15",
                     items: [
-                        /* Type 'pdf' akan merender file ke dalam tag iframe */
                         { title: "Katalog 1 (PDF)", type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", cover: "https://picsum.photos/400/300?random=15" },
                         { title: "Poster 1", type: "img", src: "https://picsum.photos/1200/800?random=16", cover: "https://picsum.photos/400/300?random=16" },
                         { title: "Poster 2", type: "img", src: "https://picsum.photos/1200/800?random=17", cover: "https://picsum.photos/400/300?random=17" }
@@ -288,11 +286,10 @@
                     title: "Karakter", 
                     cover: "https://picsum.photos/400/300?random=20",
                     items: [
-                        /* --- CONTOH PENAMBAHAN SKETCHFAB --- */
                         { 
                             title: "Model 3D (Sketchfab)", 
                             type: "sketchfab", 
-                            src: "https://sketchfab.com/models/894c25f44da240b98eb53f3e1b7f0f62/embed", /* Pastikan selalu ada ujung /embed */
+                            src: "https://sketchfab.com/models/894c25f44da240b98eb53f3e1b7f0f62/embed",
                             cover: "https://picsum.photos/400/300?random=20" 
                         },
                         { title: "Model 2", type: "img", src: "https://picsum.photos/1200/800?random=21", cover: "https://picsum.photos/400/300?random=21" },
@@ -371,14 +368,15 @@
             if (type === 'img') {
                 mediaContent.innerHTML = `<img src="${src}" alt="Full Media">`;
             } else if (type === 'video') {
-                mediaContent.innerHTML = `<video src="${src}" controls autoplay></video>`;
+                // Diperbarui: Browser modern membutuhkan 'muted' dan 'playsinline' agar mengizinkan autoplay otomatis
+                mediaContent.innerHTML = `<video src="${src}" controls autoplay muted playsinline></video>`;
             } else if (type === 'ig-video') {
-                mediaContent.innerHTML = `<iframe src="${src}" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`;
+                // Diperbarui: Menambahkan parameter ?autoplay=1 ke URL dan menambahkan atribut allow="autoplay" pada iframe
+                const autoPlaySrc = src.includes('?') ? src + '&autoplay=1' : src + '?autoplay=1';
+                mediaContent.innerHTML = `<iframe src="${autoPlaySrc}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media"></iframe>`;
             } else if (type === 'pdf') {
-                /* Pembaca PDF bawaan HTML5 */
                 mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
             } else if (type === 'sketchfab') {
-                /* Mesin Pemutar 3D untuk sketchfab */
                 mediaContent.innerHTML = `<iframe title="3D model" src="${src}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
             }
         }
