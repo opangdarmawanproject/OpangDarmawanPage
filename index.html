@@ -3,553 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Pop Portofolio</title>
+    <title>Opang Darmawan - Retro Pop Portfolio</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;700&display=swap');
+        /* ================= CSS RETRO POP ================= */
+        @import url('https://fonts.googleapis.com/css2?family=Righteous&family=Space+Mono:wght@400;700&display=swap');
 
-        /* === VARIABEL WARNA RETRO POP === */
         :root {
-            --bg-color: #FFE600; /* Kuning cerah */
-            --pink: #FF007F;
-            --cyan: #00F0FF;
-            --black: #111;
-            --white: #FFF;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --bg-color: #2b00ff;
+            --text-color: #111;
+            --yellow: #fffb00;
+            --pink: #ff007f;
+            --cyan: #00ffff;
+            --box-shadow: 6px 6px 0px #000;
+            --border: 4px solid #000;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: 'Space Mono', monospace;
             background-color: var(--bg-color);
-            color: var(--black);
+            background-image: radial-gradient(var(--cyan) 15%, transparent 16%), radial-gradient(var(--pink) 15%, transparent 16%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: var(--text-color);
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .retro-text {
-            font-family: 'Bangers', cursive;
-            letter-spacing: 2px;
-        }
-
-        /* === HALAMAN INTRO (PERMISI) === */
+        /* --- Intro Screen (PERMISI) --- */
         #intro-screen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: var(--black);
-            z-index: 1000;
+            background: var(--bg-color);
+            z-index: 9999;
             display: flex;
             flex-direction: column;
+            justify-content: flex-end;
             align-items: center;
-            justify-content: center;
+            padding-bottom: 10vh;
         }
-
-        .scattered-area {
-            position: relative;
-            width: 100%;
-            height: 60vh;
-        }
-
-        .huruf-intro {
+        
+        .scattered-letter {
             position: absolute;
-            font-family: 'Bangers', cursive;
+            font-family: 'Righteous', cursive;
             font-size: 4rem;
-            color: var(--white);
+            color: var(--yellow);
+            text-shadow: 4px 4px 0px var(--pink), -2px -2px 0px var(--cyan);
             cursor: pointer;
             user-select: none;
-            transition: all 0.3s;
-            text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--pink);
+            transition: transform 0.2s, text-shadow 0.2s;
         }
 
-        .huruf-intro:hover {
-            transform: scale(1.3);
+        .scattered-letter:hover, .scattered-letter.glowing {
+            transform: scale(1.2);
+            text-shadow: 0 0 20px var(--yellow), 4px 4px 0px var(--pink);
         }
 
-        #susunan-target {
-            height: 100px;
+        #assembly-box {
             display: flex;
             gap: 10px;
-            border-bottom: 4px dashed var(--pink);
-            padding: 10px;
             min-width: 300px;
+            height: 80px;
+            border: var(--border);
+            background: #fff;
+            box-shadow: var(--box-shadow);
+            padding: 10px;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
+            z-index: 10;
         }
 
-        .huruf-terkunci {
-            font-family: 'Bangers', cursive;
-            font-size: 4rem;
-            color: var(--bg-color);
-            text-shadow: 3px 3px 0px var(--pink);
-        }
-
-        /* === HALAMAN UTAMA === */
-        #main-screen {
-            display: none; /* Disembunyikan sampai puzzle selesai */
-            padding: 20px;
+        /* --- Main Website --- */
+        #main-content {
+            display: none;
             max-width: 1200px;
-            margin: auto;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 100vh;
+            border-left: var(--border);
+            border-right: var(--border);
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: var(--pink);
-            border: 4px solid var(--black);
-            box-shadow: 8px 8px 0px var(--black);
-            color: var(--white);
+            padding: 20px 0;
+            border-bottom: var(--border);
+            margin-bottom: 30px;
+            background: var(--yellow);
+            box-shadow: var(--box-shadow);
         }
 
         header h1 {
-            font-size: 3rem;
-            text-shadow: 3px 3px 0px var(--black);
+            font-family: 'Righteous', cursive;
+            font-size: 3.5rem;
+            margin: 0;
+            color: var(--pink);
+            text-shadow: 3px 3px 0px #000;
         }
 
-        /* Navigasi */
-        nav {
+        .nav-menu {
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
+            margin-top: 20px;
         }
 
-        .btn-retro {
-            background-color: var(--cyan);
-            border: 3px solid var(--black);
+        .retro-btn {
+            background: var(--cyan);
+            border: var(--border);
             padding: 10px 20px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 5px 5px 0px var(--black);
+            box-shadow: 4px 4px 0px #000;
             transition: all 0.1s;
+            font-family: inherit;
         }
 
-        .btn-retro:active {
-            box-shadow: 0px 0px 0px var(--black);
-            transform: translate(5px, 5px);
+        .retro-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
         }
 
-        /* Grid Kategori (3 Kolom) */
+        .retro-btn.pink { background: var(--pink); color: white; }
+
+        /* --- 3 Kolam Grid --- */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .card {
-            background: var(--white);
-            border: 4px solid var(--black);
-            box-shadow: 6px 6px 0px var(--black);
+            background: #fff;
+            border: var(--border);
+            box-shadow: var(--box-shadow);
             padding: 15px;
             text-align: center;
-            cursor: pointer;
             transition: transform 0.2s;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            background: #f0f0f0;
-        }
+        .card:hover { transform: translateY(-5px); }
 
         .card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border: 2px solid var(--black);
+            border: 2px solid #000;
             margin-bottom: 10px;
         }
 
-        /* Tombol Navigasi Kembali */
-        #btn-kembali {
-            display: none;
-            background-color: var(--pink);
-            color: white;
-            margin-bottom: 20px;
+        .card h3 {
+            font-family: 'Righteous', cursive;
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: var(--bg-color);
         }
 
-        /* === MEDIA SOSIAL & WA === */
-        #sosmed-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--bg-color);
-            border-radius: 50%;
-            width: 60px; height: 60px;
-            font-size: 24px;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 100;
+        .upload-btn {
+            background: #eee;
+            border: 2px solid #000;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
         }
 
-        #sosmed-popup {
-            display: none;
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            background: var(--white);
-            border: 3px solid var(--black);
-            box-shadow: 5px 5px 0px var(--black);
-            padding: 15px;
-            z-index: 100;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        #sosmed-popup a {
-            text-decoration: none;
-            color: var(--black);
-            font-weight: bold;
-            padding: 5px;
-            border-bottom: 2px solid transparent;
-        }
-        #sosmed-popup a:hover { border-bottom: 2px solid var(--pink); }
-
-        /* === LIGHTBOX VIEWER === */
-        #lightbox {
+        /* --- Modals (Popup) --- */
+        .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
-            align-items: center;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
             justify-content: center;
+            align-items: center;
         }
 
-        #lightbox-content {
-            max-width: 90%;
-            max-height: 90%;
-            border: 5px solid var(--cyan);
-            box-shadow: 10px 10px 0px var(--pink);
-            background: var(--white);
+        .modal-content {
+            background: var(--yellow);
+            border: var(--border);
+            box-shadow: 10px 10px 0px #000;
+            padding: 30px;
+            text-align: center;
+            max-width: 90vw;
+            max-height: 90vh;
+            position: relative;
         }
 
-        #lightbox img, #lightbox video, #lightbox iframe {
-            width: 100%;
-            height: 80vh;
-            display: block;
-        }
-
-        .btn-close {
+        .close-btn {
             position: absolute;
-            top: 20px;
-            right: 30px;
+            top: -15px; right: -15px;
             background: var(--pink);
             color: white;
+            border: var(--border);
+            width: 40px; height: 40px;
             font-size: 1.5rem;
-            padding: 10px 20px;
-            border: 3px solid var(--black);
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 4px 4px 0px var(--black);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        #media-container {
+            width: 80vw;
+            height: 70vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #media-container img, #media-container video, #media-container iframe {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .social-links a {
+            display: block;
+            margin: 15px 0;
+            font-size: 1.5rem;
+            color: var(--bg-color);
+            text-decoration: none;
+            font-family: 'Righteous', cursive;
+        }
+        .social-links a:hover { color: var(--pink); }
+
+        #breadcrumb { margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="intro-screen">
-        <h2 style="color:var(--white); margin-bottom:10px;">SUSUN KATA UNTUK MASUK</h2>
-        <div id="susunan-target"></div>
-        <div class="scattered-area" id="scattered-area">
-            </div>
+        <h2 style="position:absolute; top:20px; color:white; background:black; padding:5px 10px; border:2px solid white;">Klik Huruf untuk Menyusun "PERMISI"</h2>
+        <div id="assembly-box"></div>
     </div>
 
-    <div id="main-screen">
+    <div id="main-content">
         <header>
-            <h1>RETRO POP STUDIO</h1>
-            <p>Karya Nyata, Warna Merona!</p>
+            <h1>OPANG DARMAWAN</h1>
+            <div class="nav-menu">
+                <button class="retro-btn" onclick="renderLevel1('Fotografi')">FOTOGRAFI</button>
+                <button class="retro-btn" onclick="renderLevel1('Video')">VIDEO</button>
+                <button class="retro-btn" onclick="renderLevel1('Desain')">DESAIN</button>
+                <button class="retro-btn" onclick="renderLevel1('3Ddesain')">3D DESAIN</button>
+                <button class="retro-btn pink" onclick="document.getElementById('social-modal').style.display='flex'">KONTAK</button>
+            </div>
         </header>
 
-        <nav>
-            <button class="btn-retro" onclick="loadKategori('Fotografi')">Fotografi</button>
-            <button class="btn-retro" onclick="loadKategori('Video')">Video</button>
-            <button class="btn-retro" onclick="loadKategori('Desain')">Desain</button>
-            <button class="btn-retro" onclick="loadKategori('3Ddesain')">3D Desain</button>
-        </nav>
-
-        <button class="btn-retro" id="btn-kembali" onclick="kembaliKeKategoriUtama()">⬅ Kembali</button>
-        
-        <h2 id="judul-seksi" style="margin-bottom:15px; font-size:2rem; border-bottom:4px solid var(--black); display:inline-block;">Pilih Kategori</h2>
-        
-        <div class="grid-container" id="konten-grid">
+        <div id="breadcrumb">Silakan pilih menu di atas!</div>
+        <div id="content-area" class="grid-container">
             </div>
     </div>
 
-    <button id="sosmed-btn" class="btn-retro" onclick="toggleSosmed()">💬</button>
-    <div id="sosmed-popup">
-        <a href="https://wa.me/6280000000000" target="_blank">🟢 WhatsApp</a>
-        <a href="#" target="_blank">🟣 Instagram</a>
-        <a href="#" target="_blank">🔵 Facebook</a>
+    <div id="media-modal" class="modal">
+        <div class="modal-content" style="background:#fff;">
+            <button class="close-btn" onclick="closeMedia()">X</button>
+            <div id="media-container"></div>
+        </div>
     </div>
 
-    <div id="lightbox">
-        <button class="btn-close" onclick="closeLightbox()">X CLOSE</button>
-        <div id="lightbox-content">
+    <div id="social-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="document.getElementById('social-modal').style.display='none'">X</button>
+            <h2 style="font-family:'Righteous', cursive; font-size: 2rem;">HUBUNGI OPANG</h2>
+            <div class="social-links">
+                <a href="https://wa.me/6280000000000" target="_blank">📞 WhatsApp Me</a>
+                <a href="https://instagram.com/" target="_blank">📸 Instagram</a>
+                <a href="https://behance.net/" target="_blank">🎨 Behance Portofolio</a>
             </div>
+        </div>
     </div>
 
     <script>
-        /* === 1. AUDIO SYNTH (Suara Gitar Retro Tanpa File Eksternal) === */
+        // --- 1. AUDIO (GUITAR SYNTH) ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
+        const audioCtx = new AudioContext();
 
-        function playGuitarSound() {
-            if (!audioCtx) audioCtx = new AudioContext();
+        function playGuitarSound(index) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
+            // Frequencies for P-E-R-M-I-S-I (Simple major scale)
+            const freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 523.25];
             const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const gainNode = audioCtx.createGain();
             
-            osc.type = 'triangle'; // Mirip petikan senar sintesis
-            osc.frequency.setValueAtTime(220 + Math.random() * 200, audioCtx.currentTime); // Frekuensi acak tiap huruf
+            osc.type = 'triangle'; // Terdengar seperti petikan senar vintage
+            osc.frequency.setValueAtTime(freqs[index % freqs.length], audioCtx.currentTime);
             
-            gain.gain.setValueAtTime(1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5); // Fade out cepat
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
             
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            osc.stop(audioCtx.currentTime + 1.5);
         }
 
-        /* === 2. LOGIKA INTRO "PERMISI" === */
-        const kataKunci = "PERMISI".split('');
-        let urutanSaatIni = 0;
+        // --- 2. INTRO LOGIC (PERMISI) ---
+        const targetWord = "PERMISI";
+        let currentWord = "";
+        let attemptCount = 0;
+        const introScreen = document.getElementById('intro-screen');
+        const assemblyBox = document.getElementById('assembly-box');
 
-        function inisialisasiIntro() {
-            const area = document.getElementById('scattered-area');
-            const target = document.getElementById('susunan-target');
-            
-            // Acak posisi huruf
-            let hurufAcak = [...kataKunci].sort(() => Math.random() - 0.5);
-            
-            hurufAcak.forEach((huruf) => {
+        function initIntro() {
+            assemblyBox.innerHTML = '';
+            currentWord = "";
+            const letters = targetWord.split('');
+            // Acak posisi
+            const shuffledLetters = letters.map((char, i) => ({ char, id: i })).sort(() => Math.random() - 0.5);
+
+            document.querySelectorAll('.scattered-letter').forEach(el => el.remove());
+
+            shuffledLetters.forEach((item, index) => {
                 let el = document.createElement('div');
-                el.innerText = huruf;
-                el.className = 'huruf-intro';
-                
-                // Posisi Acak
-                el.style.left = Math.floor(Math.random() * 80) + 10 + '%';
-                el.style.top = Math.floor(Math.random() * 80) + 10 + '%';
+                el.className = 'scattered-letter';
+                el.innerText = item.char;
+                // Posisi acak di layar
+                el.style.left = (Math.random() * 70 + 10) + 'vw';
+                el.style.top = (Math.random() * 60 + 10) + 'vh';
                 
                 el.onclick = () => {
-                    playGuitarSound();
-                    // Cek apakah huruf yang diklik sesuai urutan "PERMISI"
-                    if (huruf === kataKunci[urutanSaatIni]) {
-                        el.style.display = 'none'; // Sembunyikan yang berhamburan
-                        
-                        let kunciEl = document.createElement('div');
-                        kunciEl.className = 'huruf-terkunci';
-                        kunciEl.innerText = huruf;
-                        target.appendChild(kunciEl);
-                        
-                        urutanSaatIni++;
-                        
-                        if (urutanSaatIni === kataKunci.length) {
+                    playGuitarSound(currentWord.length);
+                    el.classList.add('glowing');
+                    el.style.position = 'static'; // Masuk ke box
+                    assemblyBox.appendChild(el);
+                    currentWord += item.char;
+                    el.onclick = null; // Matikan klik setelah masuk box
+
+                    if (currentWord.length === targetWord.length) {
+                        if (currentWord === targetWord) {
                             setTimeout(() => {
                                 document.getElementById('intro-screen').style.display = 'none';
-                                document.getElementById('main-screen').style.display = 'block';
+                                document.getElementById('main-content').style.display = 'block';
                             }, 500);
+                        } else {
+                            setTimeout(() => {
+                                alert("Susunan salah! Coba susun 'PERMISI'.");
+                                initIntro();
+                            }, 300);
                         }
-                    } else {
-                        // Efek salah (getar)
-                        el.style.transform = 'translate(10px, 0)';
-                        setTimeout(() => el.style.transform = 'translate(0, 0)', 100);
                     }
                 };
-                area.appendChild(el);
+                introScreen.appendChild(el);
             });
         }
+        initIntro();
 
-        window.onload = inisialisasiIntro;
+        // --- 3. DATA WEBSITE (3 Kolam -> 3 Kolam) ---
+        // Anda bisa mengganti URL gambar default dengan placeholder atau gambar asli Anda
+        const placeholderImg = "https://picsum.photos/600/400?random=";
+        const dummyPdf = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        const dummyVideo = "https://www.w3schools.com/html/mov_bbb.mp4";
 
-        /* === 3. DATA KATEGORI (3 Kolom -> 3 Kolom) === */
-        // Data ini menggunakan placeholder gambar/video agar aman dan langsung jalan
-        const dataPortofolio = {
+        const siteData = {
             "Fotografi": [
-                { nama: "Fotografi Ai", cover: "https://picsum.photos/id/10/400/300", 
-                  sub: [
-                      { nama: "Cyberpunk City", tipe: "img", url: "https://picsum.photos/id/11/1000/800" },
-                      { nama: "Robot Potret", tipe: "img", url: "https://picsum.photos/id/12/1000/800" },
-                      { nama: "Alam AI", tipe: "img", url: "https://picsum.photos/id/13/1000/800" }
-                  ] 
-                },
-                { nama: "Fotografi Kamera", cover: "https://picsum.photos/id/14/400/300",
-                  sub: [
-                      { nama: "Wedding", tipe: "img", url: "https://picsum.photos/id/15/1000/800" },
-                      { nama: "Jalanan", tipe: "img", url: "https://picsum.photos/id/16/1000/800" },
-                      { nama: "Produk", tipe: "img", url: "https://picsum.photos/id/17/1000/800" }
-                  ]
-                },
-                { nama: "Eksperimen Lensa", cover: "https://picsum.photos/id/18/400/300",
-                  sub: [
-                      { nama: "Makro", tipe: "img", url: "https://picsum.photos/id/19/1000/800" },
-                      { nama: "Fisheye", tipe: "img", url: "https://picsum.photos/id/20/1000/800" },
-                      { nama: "Astrophotography", tipe: "img", url: "https://picsum.photos/id/21/1000/800" }
-                  ]
-                }
+                { name: "Fotografi AI", cover: placeholderImg+"1", items: [
+                    { name: "Karya AI 1", file: placeholderImg+"11", type: "img" },
+                    { name: "Karya AI 2", file: placeholderImg+"12", type: "img" },
+                    { name: "Karya AI 3", file: placeholderImg+"13", type: "img" }
+                ]},
+                { name: "Fotografi Kamera", cover: placeholderImg+"2", items: [
+                    { name: "Jepretan 1", file: placeholderImg+"14", type: "img" },
+                    { name: "Jepretan 2", file: placeholderImg+"15", type: "img" },
+                    { name: "Jepretan 3", file: placeholderImg+"16", type: "img" }
+                ]},
+                { name: "Komersial", cover: placeholderImg+"3", items: [
+                    { name: "Produk 1", file: placeholderImg+"17", type: "img" },
+                    { name: "Produk 2", file: placeholderImg+"18", type: "img" },
+                    { name: "Produk 3", file: placeholderImg+"19", type: "img" }
+                ]}
             ],
             "Video": [
-                { nama: "Film Pendek", cover: "https://picsum.photos/id/22/400/300",
-                  sub: [
-                      { nama: "Teaser 1", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "Teaser 2", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "BTS", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" }
-                  ]
-                },
-                { nama: "Iklan Komersial", cover: "https://picsum.photos/id/23/400/300",
-                  sub: [
-                      { nama: "Iklan Sepatu", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "Iklan Minuman", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "Iklan Mobil", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" }
-                  ]
-                },
-                { nama: "Dokumenter", cover: "https://picsum.photos/id/24/400/300",
-                  sub: [
-                      { nama: "Alam", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "Kota", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-                      { nama: "Budaya", tipe: "video", url: "https://www.w3schools.com/html/mov_bbb.mp4" }
-                  ]
-                }
+                { name: "Video Musik", cover: placeholderImg+"4", items: [
+                    { name: "Klip 1", file: dummyVideo, type: "video" },
+                    { name: "Klip 2", file: dummyVideo, type: "video" },
+                    { name: "Klip 3", file: dummyVideo, type: "video" }
+                ]},
+                { name: "Iklan", cover: placeholderImg+"5", items: [
+                    { name: "Iklan 1", file: dummyVideo, type: "video" },
+                    { name: "Iklan 2", file: dummyVideo, type: "video" },
+                    { name: "Iklan 3", file: dummyVideo, type: "video" }
+                ]},
+                { name: "Dokumenter", cover: placeholderImg+"6", items: [
+                    { name: "Doc 1", file: dummyVideo, type: "video" },
+                    { name: "Doc 2", file: dummyVideo, type: "video" },
+                    { name: "Doc 3", file: dummyVideo, type: "video" }
+                ]}
             ],
             "Desain": [
-                 { nama: "Desain Logo", cover: "https://picsum.photos/id/25/400/300",
-                  sub: [
-                      { nama: "Logo Kopi", tipe: "img", url: "https://picsum.photos/id/26/1000/800" },
-                      { nama: "Logo Tech", tipe: "img", url: "https://picsum.photos/id/27/1000/800" },
-                      { nama: "Logo Band", tipe: "img", url: "https://picsum.photos/id/28/1000/800" }
-                  ]
-                },
-                { nama: "UI/UX", cover: "https://picsum.photos/id/29/400/300",
-                  sub: [
-                      { nama: "App Mobile", tipe: "img", url: "https://picsum.photos/id/30/1000/800" },
-                      { nama: "Web Dashboard", tipe: "img", url: "https://picsum.photos/id/31/1000/800" },
-                      { nama: "Landing Page", tipe: "img", url: "https://picsum.photos/id/32/1000/800" }
-                  ]
-                },
-                { nama: "Brosur & Majalah", cover: "https://picsum.photos/id/33/400/300",
-                  sub: [
-                      { nama: "Katalog PDF", tipe: "pdf", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-                      { nama: "Flyer Event", tipe: "img", url: "https://picsum.photos/id/34/1000/800" },
-                      { nama: "Majalah Mode", tipe: "pdf", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
-                  ]
-                }
+                { name: "Logo & Branding", cover: placeholderImg+"7", items: [
+                    { name: "Brand 1", file: placeholderImg+"20", type: "img" },
+                    { name: "Brand 2", file: placeholderImg+"21", type: "img" },
+                    { name: "Brand 3", file: placeholderImg+"22", type: "img" }
+                ]},
+                { name: "Ilustrasi", cover: placeholderImg+"8", items: [
+                    { name: "Vector 1", file: placeholderImg+"23", type: "img" },
+                    { name: "Vector 2", file: placeholderImg+"24", type: "img" },
+                    { name: "Vector 3", file: placeholderImg+"25", type: "img" }
+                ]},
+                { name: "Dokumen PDF", cover: placeholderImg+"9", items: [
+                    { name: "Majalah", file: dummyPdf, type: "pdf" },
+                    { name: "Brosur", file: dummyPdf, type: "pdf" },
+                    { name: "Katalog", file: dummyPdf, type: "pdf" }
+                ]}
             ],
             "3Ddesain": [
-                 { nama: "Karakter 3D", cover: "https://picsum.photos/id/35/400/300",
-                  sub: [
-                      { nama: "Hero Utama", tipe: "img", url: "https://picsum.photos/id/36/1000/800" },
-                      { nama: "Monster", tipe: "img", url: "https://picsum.photos/id/37/1000/800" },
-                      { nama: "NPC", tipe: "img", url: "https://picsum.photos/id/38/1000/800" }
-                  ]
-                },
-                { nama: "Lingkungan 3D", cover: "https://picsum.photos/id/39/400/300",
-                  sub: [
-                      { nama: "Hutan Tropis", tipe: "img", url: "https://picsum.photos/id/40/1000/800" },
-                      { nama: "Ruang Angkasa", tipe: "img", url: "https://picsum.photos/id/41/1000/800" },
-                      { nama: "Kota Masa Depan", tipe: "img", url: "https://picsum.photos/id/42/1000/800" }
-                  ]
-                },
-                { nama: "Aset Game", cover: "https://picsum.photos/id/43/400/300",
-                  sub: [
-                      { nama: "Senjata", tipe: "img", url: "https://picsum.photos/id/44/1000/800" },
-                      { nama: "Kendaraan", tipe: "img", url: "https://picsum.photos/id/45/1000/800" },
-                      { nama: "Properti Rumah", tipe: "img", url: "https://picsum.photos/id/46/1000/800" }
-                  ]
-                }
+                { name: "Karakter 3D", cover: placeholderImg+"10", items: [
+                    { name: "Hero", file: placeholderImg+"26", type: "img" },
+                    { name: "Monster", file: placeholderImg+"27", type: "img" },
+                    { name: "NPC", file: placeholderImg+"28", type: "img" }
+                ]},
+                { name: "Lingkungan", cover: placeholderImg+"29", items: [
+                    { name: "Kota", file: placeholderImg+"30", type: "img" },
+                    { name: "Hutan", file: placeholderImg+"31", type: "img" },
+                    { name: "Ruang Angkasa", file: placeholderImg+"32", type: "img" }
+                ]},
+                { name: "Animasi 3D", cover: placeholderImg+"33", items: [
+                    { name: "Reel 1", file: dummyVideo, type: "video" },
+                    { name: "Reel 2", file: dummyVideo, type: "video" },
+                    { name: "Reel 3", file: dummyVideo, type: "video" }
+                ]}
             ]
         };
 
-        let kategoriAktif = "";
+        const contentArea = document.getElementById('content-area');
+        const breadcrumb = document.getElementById('breadcrumb');
 
-        // Tampilkan 3 Kolom Level 1
-        function loadKategori(namaKategori) {
-            kategoriAktif = namaKategori;
-            document.getElementById('judul-seksi').innerText = namaKategori;
-            document.getElementById('btn-kembali').style.display = 'none';
-            
-            const grid = document.getElementById('konten-grid');
-            grid.innerHTML = ""; // Bersihkan isi
+        // --- 4. LOGIC RENDER KONTEN & UPLOAD COVER ---
+        
+        // Fungsi untuk mengunggah gambar cover sementara ke memori browser
+        function handleCoverUpload(event, imgId) {
+            const file = event.target.files[0];
+            if(file) {
+                const imgURL = URL.createObjectURL(file);
+                document.getElementById(imgId).src = imgURL;
+            }
+        }
 
-            const items = dataPortofolio[namaKategori];
-            if(!items) return;
+        // Level 1: Render 3 Sub-kategori
+        function renderLevel1(categoryName) {
+            breadcrumb.innerHTML = `Kategori: <b>${categoryName}</b>`;
+            contentArea.innerHTML = '';
+            const subCategories = siteData[categoryName];
+
+            subCategories.forEach((sub, index) => {
+                const uniqueId = `cover-${categoryName}-${index}`;
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${sub.cover}" id="${uniqueId}" alt="Cover">
+                    <label class="upload-btn">
+                        Ubah Cover Custom
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleCoverUpload(event, '${uniqueId}')">
+                    </label>
+                    <h3>${sub.name}</h3>
+                    <button class="retro-btn" onclick='renderLevel2(${JSON.stringify(sub.items)}, "${categoryName} > ${sub.name}")'>Lihat ${sub.name}</button>
+                `;
+                contentArea.appendChild(card);
+            });
+        }
+
+        // Level 2: Render 3 Item dalam Sub-kategori
+        function renderLevel2(items, pathText) {
+            breadcrumb.innerHTML = `Kategori: <b>${pathText}</b>`;
+            contentArea.innerHTML = '';
 
             items.forEach((item, index) => {
-                let card = document.createElement('div');
+                const uniqueId = `item-${index}`;
+                const card = document.createElement('div');
                 card.className = 'card';
+                
+                // Jika item adalah PDF/Video, beri cover placeholder agar tidak berat
+                let coverImg = item.type === 'img' ? item.file : placeholderImg + (Math.floor(Math.random() * 100));
+
                 card.innerHTML = `
-                    <img src="${item.cover}" alt="${item.nama}">
-                    <h3 class="retro-text">${item.nama}</h3>
+                    <img src="${coverImg}" id="${uniqueId}" alt="Item Cover">
+                    <label class="upload-btn">
+                        Ubah Cover Custom
+                        <input type="file" accept="image/*" style="display:none;" onchange="handleCoverUpload(event, '${uniqueId}')">
+                    </label>
+                    <h3>${item.name}</h3>
+                    <button class="retro-btn pink" onclick="openMedia('${item.file}', '${item.type}')">Buka Penampil Penuh</button>
                 `;
-                card.onclick = () => loadSubKategori(namaKategori, index);
-                grid.appendChild(card);
+                contentArea.appendChild(card);
             });
         }
 
-        // Tampilkan 3 Kolom Level 2 (Isi Media)
-        function loadSubKategori(namaKategori, indexLevel1) {
-            const subItems = dataPortofolio[namaKategori][indexLevel1].sub;
-            document.getElementById('judul-seksi').innerText = dataPortofolio[namaKategori][indexLevel1].nama;
-            document.getElementById('btn-kembali').style.display = 'inline-block';
-            
-            const grid = document.getElementById('konten-grid');
-            grid.innerHTML = "";
+        // --- 5. LOGIC MEDIA VIEWER ---
+        const mediaModal = document.getElementById('media-modal');
+        const mediaContainer = document.getElementById('media-container');
 
-            subItems.forEach((sub) => {
-                let card = document.createElement('div');
-                card.className = 'card';
-                
-                // Jika video atau PDF, covernya pakai gambar dummy dengan icon
-                let coverImg = "https://picsum.photos/seed/"+sub.nama+"/400/300"; 
-                
-                card.innerHTML = `
-                    <img src="${coverImg}" alt="${sub.nama}">
-                    <h3 class="retro-text">${sub.nama}</h3>
-                    <p style="margin-top:10px; font-weight:bold;">Tipe: ${sub.tipe.toUpperCase()}</p>
-                `;
-                
-                card.onclick = () => bukaMedia(sub.tipe, sub.url);
-                grid.appendChild(card);
-            });
-        }
+        function openMedia(url, type) {
+            mediaModal.style.display = 'flex';
+            mediaContainer.innerHTML = ''; // Bersihkan dulu
 
-        function kembaliKeKategoriUtama() {
-            loadKategori(kategoriAktif);
-        }
-
-        /* === 4. MEDIA VIEWER (LIGHTBOX) === */
-        function bukaMedia(tipe, url) {
-            const lightbox = document.getElementById('lightbox');
-            const konten = document.getElementById('lightbox-content');
-            konten.innerHTML = ""; // Bersihkan
-
-            if (tipe === 'img') {
-                konten.innerHTML = `<img src="${url}" alt="Gambar Penuh">`;
-            } else if (tipe === 'video') {
-                konten.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Browser tidak support video.</video>`;
-            } else if (tipe === 'pdf') {
-                konten.innerHTML = `<iframe src="${url}"></iframe>`;
+            if(type === 'img') {
+                mediaContainer.innerHTML = `<img src="${url}" alt="Karya">`;
+            } else if (type === 'video') {
+                mediaContainer.innerHTML = `<video src="${url}" controls autoplay></video>`;
+            } else if (type === 'pdf') {
+                mediaContainer.innerHTML = `<iframe src="${url}" frameborder="0"></iframe>`;
             }
-
-            lightbox.style.display = 'flex';
         }
 
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-            document.getElementById('lightbox-content').innerHTML = ""; // Matikan video/audio
-        }
-
-        /* === 5. TOGGLE MEDIA SOSIAL === */
-        function toggleSosmed() {
-            const popup = document.getElementById('sosmed-popup');
-            if (popup.style.display === 'flex') {
-                popup.style.display = 'none';
-            } else {
-                popup.style.display = 'flex';
-            }
+        function closeMedia() {
+            mediaModal.style.display = 'none';
+            mediaContainer.innerHTML = ''; // Menghentikan video/audio saat ditutup
         }
     </script>
 </body>
