@@ -274,7 +274,6 @@
                     title: "Music Video", 
                     cover: "MEGATRUH.png", 
                     items: [
-                        // DIPERBARUI: type diubah menjadi 'youtube'
                         {title:"MEGATRUH", type:"youtube", src:"https://youtu.be/goXZUdqgouI?si=xiGeThdctmT6XYiY", cover:"MEGATRUH.png"}
                     ] 
                 },
@@ -282,7 +281,6 @@
                     title: "Podcast/Talk", 
                     cover: "Podcast.png", 
                     items: [
-                        // DIPERBARUI: type diubah menjadi 'youtube'
                         {title:"Undang Petani", type:"youtube", src:"https://youtu.be/S9Ruz5BBzSU?si=enji6zDTHnpF6_bT", cover:"Podcast.png"}
                     ] 
                 }
@@ -312,13 +310,13 @@
                             cover: "sketchfab1.png" 
                         },
                         { 
-                            title: "Sepatu (Sketchfab)", 
+                            title: "Tas (Sketchfab)", 
                             type: "sketchfab", 
                             src: "https://sketchfab.com/3d-models/tas-stuffo-2-71d09c6c6f244566bbf3bb6277b20c90",
                             cover: "sketchfab2.png" 
                         },
                         { 
-                            title: "Sepatu (Sketchfab)", 
+                            title: "Kursi (Sketchfab)", 
                             type: "sketchfab", 
                             src: "https://sketchfab.com/3d-models/chair-simple-design-a536b630008a4fd9808f329a6c576599",
                             cover: "sketchfab3.png" 
@@ -398,19 +396,34 @@
             return cleanUrl;
         }
 
-        // FUNGSI BARU: Mengambil ID YouTube dan mengubahnya jadi pemutar otomatis (Embed)
+        // Fungsi Pembersih URL YouTube
         function formatYouTubeUrl(rawUrl) {
             let videoId = "";
-            
-            // Cek format link (bisa youtu.be atau youtube.com/watch)
             if (rawUrl.includes("youtu.be/")) {
                 videoId = rawUrl.split("youtu.be/")[1].split("?")[0];
             } else if (rawUrl.includes("youtube.com/watch?v=")) {
                 videoId = rawUrl.split("v=")[1].split("&")[0];
             }
-            
-            // Mengembalikan link embed dengan parameter autoplay
             return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        }
+
+        // FUNGSI BARU: Mesin Pembersih URL Khusus Sketchfab
+        function formatSketchfabUrl(rawUrl) {
+            // Hilangkan semua atribut tracking/tambahan setelah tanda tanya
+            let cleanUrl = rawUrl.split('?')[0];
+            
+            // Hilangkan garis miring di paling belakang jika ada
+            if (cleanUrl.endsWith('/')) {
+                cleanUrl = cleanUrl.slice(0, -1);
+            }
+            
+            // Cek apakah URL sudah berakhiran embed. Jika belum, tambahkan.
+            if (!cleanUrl.endsWith('embed')) {
+                cleanUrl += '/embed';
+            }
+            
+            // Tambahkan parameter ?autostart=1 agar model langsung dimuat otomatis
+            return cleanUrl + '?autostart=1';
         }
 
         function openMediaModal(type, src) {
@@ -426,15 +439,17 @@
                 const autoPlaySrc = finalUrl + '?autoplay=1';
                 mediaContent.innerHTML = `<iframe class="ig-iframe" src="${autoPlaySrc}" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media"></iframe>`;
             
-            // LOGIKA BARU: Khusus YouTube Video
             } else if (type === 'youtube') {
                 const ytEmbedUrl = formatYouTubeUrl(src);
                 mediaContent.innerHTML = `<iframe src="${ytEmbedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             
             } else if (type === 'pdf') {
                 mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
+            
+            // LOGIKA DIPERBARUI: Pemutar khusus Sketchfab
             } else if (type === 'sketchfab') {
-                mediaContent.innerHTML = `<iframe title="3D model" src="${src}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
+                const sketchfabUrl = formatSketchfabUrl(src);
+                mediaContent.innerHTML = `<iframe title="3D model" src="${sketchfabUrl}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
             }
         }
 
