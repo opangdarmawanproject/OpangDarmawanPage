@@ -3,380 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Pop Portofolio</title>
+    <title>Retro Pop Portfolio</title>
     <style>
-        /* === TEMA RETRO POP CSS === */
+        /* === FONT & ROOT STYLES === */
+        @import url('https://fonts.googleapis.com/css2?family=Righteous&family=Space+Grotesk:wght@400;700&display=swap');
+        
         :root {
-            --bg-color: #120424;
-            --neon-pink: #ff007a;
-            --neon-cyan: #00f0ff;
-            --neon-yellow: #fffb00;
-            --font-main: 'Courier New', Courier, monospace;
+            --hot-pink: #ff007b;
+            --cyan: #00f0ff;
+            --yellow: #ffd900;
+            --lime: #00ff73;
+            --dark: #1a1a1a;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-color);
-            color: white;
-            font-family: var(--font-main);
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--yellow);
+            color: var(--dark);
             overflow-x: hidden;
         }
 
-        /* --- INTRO SCREEN --- */
-        #intro-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        h1, h2, h3, .retro-font { font-family: 'Righteous', cursive; }
+
+        /* Gaya Kotak Retro (Brutalism/Pop Art) */
+        .retro-box {
+            border: 4px solid var(--dark);
+            box-shadow: 8px 8px 0px var(--dark);
+            background: white;
+            border-radius: 0;
         }
-        
-        #target-box {
-            display: flex; gap: 10px; min-height: 80px; margin-top: 50px;
-            border-bottom: 2px dashed var(--neon-cyan); padding-bottom: 10px;
-            width: 300px; justify-content: center; align-items: flex-end;
+
+        /* === HALAMAN INTRO (TEKA-TEKI PERMISI) === */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--hot-pink);
+            background-image: radial-gradient(var(--dark) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 10vh;
+            transition: opacity 1s ease-out;
         }
 
         .scattered-letter {
-            position: absolute; font-size: 3rem; font-weight: bold; cursor: pointer;
-            color: transparent; -webkit-text-stroke: 2px var(--neon-pink);
-            transition: all 0.3s ease; user-select: none;
+            position: absolute;
+            font-size: 5rem;
+            font-family: 'Righteous', cursive;
+            color: var(--cyan);
+            -webkit-text-stroke: 2px var(--dark);
+            text-shadow: 4px 4px 0px var(--dark);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
         }
 
-        .scattered-letter:hover {
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+        .scattered-letter:hover, .scattered-letter.glow {
+            color: white;
+            text-shadow: 0 0 15px white, 0 0 30px var(--cyan), 4px 4px 0px var(--dark);
+            transform: scale(1.2) rotate(10deg);
         }
 
-        .placed-letter {
-            position: relative; font-size: 4rem; font-weight: bold;
-            color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan), 0 0 30px var(--neon-cyan);
-            animation: pop 0.3s ease;
+        #slots-container {
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+            border: 4px dashed var(--yellow);
         }
 
-        @keyframes pop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+        .slot {
+            width: 60px; height: 80px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-family: 'Righteous', cursive;
+            color: var(--yellow);
+            text-shadow: 2px 2px 0px var(--dark);
+        }
 
-        /* --- MAIN WEBSITE --- */
-        #main-site { display: none; padding: 20px; max-width: 1200px; margin: auto; }
+        /* === HALAMAN UTAMA === */
+        #main-screen { display: none; padding: 20px; }
         
-        header { text-align: center; margin-bottom: 40px; }
-        header h1 {
-            font-size: 3rem; color: var(--neon-yellow); text-transform: uppercase;
-            text-shadow: 3px 3px 0px var(--neon-pink), -2px -2px 0px var(--neon-cyan);
-            letter-spacing: 5px;
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--cyan);
+            margin-bottom: 20px;
         }
 
-        /* Menu Navigasi */
-        nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
+        header h1 { font-size: 4rem; margin: 0; text-transform: uppercase; letter-spacing: 5px; color: white; -webkit-text-stroke: 2px var(--dark); text-shadow: 6px 6px 0px var(--dark);}
+
+        /* Navigasi Kategori */
+        nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
         .nav-btn {
-            background: transparent; color: var(--neon-cyan);
-            border: 2px solid var(--neon-cyan); padding: 10px 20px;
-            font-size: 1.2rem; font-family: var(--font-main); font-weight: bold;
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-family: 'Righteous', cursive;
+            background: var(--hot-pink);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
-        .nav-btn:hover, .nav-btn.active {
-            background: var(--neon-cyan); color: var(--bg-color);
-            box-shadow: 0 0 15px var(--neon-cyan);
+        .nav-btn:active { transform: translate(4px, 4px); box-shadow: 4px 4px 0px var(--dark); }
+        .nav-btn.active { background: var(--lime); color: var(--dark); }
+
+        /* Form Upload */
+        #upload-section {
+            background: #fff;
+            padding: 20px;
+            margin: 0 auto 30px auto;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
         }
+        #upload-section input, #upload-section select, #upload-section button {
+            padding: 10px; font-size: 1rem; border: 2px solid var(--dark); font-family: 'Space Grotesk', sans-serif;
+        }
+        #upload-btn { background: var(--cyan); font-weight: bold; cursor: pointer; }
+        #upload-btn:hover { background: var(--yellow); }
 
-        .nav-btn.btn-sosmed { border-color: var(--neon-pink); color: var(--neon-pink); }
-        .nav-btn.btn-sosmed:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 15px var(--neon-pink); }
-
-        /* Kategori & Grid 3 Kolom */
-        .category-section { display: none; }
-        .category-section.active { display: block; animation: fadeIn 0.5s ease; }
-        
-        .grid-container {
+        /* Grid Media (3 Kolom) */
+        .media-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 KOLOM SESUAI PERMINTAAN */
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .grid-item {
-            background: #2a0a4a; border: 2px solid var(--neon-pink);
-            height: 250px; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; overflow: hidden; position: relative; transition: 0.3s;
+        .media-item {
+            aspect-ratio: 1;
+            background: #eee;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
         }
-        .grid-item:hover { box-shadow: 0 0 20px var(--neon-pink); transform: scale(1.02); }
-        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
-        .grid-item .overlay-text {
-            position: absolute; background: rgba(0,0,0,0.7); width: 100%; height: 100%;
+
+        .media-item img, .media-item video {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;
+        }
+        .media-item:hover img, .media-item:hover video { transform: scale(1.1); }
+        .media-item .pdf-label {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0; transition: 0.3s; font-size: 1.5rem; color: var(--neon-yellow);
+            background: var(--hot-pink); color: white; font-size: 2rem; font-family: 'Righteous';
         }
-        .grid-item:hover .overlay-text { opacity: 1; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* === MEDIA VIEWER (LIGHTBOX) === */
+        #media-viewer {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;
+        }
+        #viewer-content { width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; }
+        #viewer-content img, #viewer-content video, #viewer-content iframe {
+            max-width: 100%; max-height: 100%; border: 4px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        #close-viewer {
+            position: absolute; top: 20px; right: 30px; font-size: 3rem; color: var(--hot-pink);
+            cursor: pointer; font-family: sans-serif; font-weight: bold; text-shadow: 2px 2px 0 white;
+        }
 
-        /* --- MODAL MEDIA VIEWER --- */
-        #media-modal, #sosmed-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 4, 36, 0.95); z-index: 10000;
-            justify-content: center; align-items: center; flex-direction: column;
+        /* === SOSIAL MEDIA FLOATING === */
+        #social-toggle {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--lime); display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; cursor: pointer; z-index: 9000; border: 3px solid var(--dark);
         }
-        .modal-content {
-            width: 80%; max-width: 900px; height: 80%; max-height: 600px;
-            border: 3px solid var(--neon-cyan); box-shadow: 0 0 30px var(--neon-cyan);
-            background: #000; display: flex; justify-content: center; align-items: center;
+        #social-menu {
+            display: none; position: fixed; bottom: 100px; right: 30px;
+            flex-direction: column; gap: 10px; z-index: 9000;
         }
-        .modal-content img, .modal-content video, .modal-content iframe {
-            width: 100%; height: 100%; object-fit: contain; border: none;
+        .social-btn {
+            padding: 10px 20px; background: white; text-decoration: none; color: var(--dark);
+            font-weight: bold; font-family: 'Righteous'; text-align: center;
         }
-        .close-btn {
-            position: absolute; top: 20px; right: 40px; font-size: 3rem; color: var(--neon-pink);
-            cursor: pointer; text-shadow: 0 0 10px var(--neon-pink); transition: 0.2s;
-        }
-        .close-btn:hover { transform: scale(1.2); color: white; }
+        .wa-btn { background: #25D366; color: white;}
 
-        /* Modal Sosmed Khusus */
-        .sosmed-box {
-            background: #2a0a4a; padding: 40px; border: 3px solid var(--neon-yellow);
-            text-align: center; box-shadow: 0 0 30px var(--neon-yellow);
-        }
-        .sosmed-box a {
-            display: block; margin: 15px 0; color: white; text-decoration: none; font-size: 1.5rem;
-            border: 1px solid var(--neon-cyan); padding: 10px; transition: 0.3s;
-        }
-        .sosmed-box a:hover { background: var(--neon-cyan); color: #000; }
-
-        /* Responsive untuk layar kecil */
+        /* Responsive */
         @media (max-width: 768px) {
-            .grid-container { grid-template-columns: 1fr; } /* Menumpuk di HP agar tidak hancur */
+            .media-grid { grid-template-columns: repeat(1, 1fr); }
+            header h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
     <div id="intro-screen">
-        <h2 style="color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); margin-bottom: 20px; text-align:center;">Susun kata 'PERMISI' untuk masuk</h2>
-        <div id="target-box"></div>
+        <h2 style="color: white; margin-bottom: 20px; text-shadow: 2px 2px #000;">Susun Kata Ini</h2>
+        <div id="slots-container">
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+            <div class="slot"></div>
+        </div>
     </div>
 
-    <div id="main-site">
-        <header>
-            <h1>Opang Darmawan</h1>
+    <div id="main-screen">
+        <header class="retro-box">
+            <h1>Retro Portofolio</h1>
+            <p style="font-weight: bold;">Estetika Pop Art & Kreativitas Tanpa Batas</p>
         </header>
 
         <nav>
-            <button class="nav-btn active" onclick="showCategory('fotografi')">Fotografi</button>
-            <button class="nav-btn" onclick="showCategory('video')">Video</button>
-            <button class="nav-btn" onclick="showCategory('desain')">Desain</button>
-            <button class="nav-btn" onclick="showCategory('3d-desain')">3D Desain</button>
-            <button class="nav-btn btn-sosmed" onclick="openSosmed()">Kontak & Sosmed</button>
+            <div class="nav-btn retro-box active" onclick="changeCategory('Fotografi')">Fotografi</div>
+            <div class="nav-btn retro-box" onclick="changeCategory('Video')">Video</div>
+            <div class="nav-btn retro-box" onclick="changeCategory('Desain')">Desain</div>
+            <div class="nav-btn retro-box" onclick="changeCategory('3D Desain')">3D Desain</div>
         </nav>
 
-        <div id="fotografi" class="category-section active">
-            <div class="grid-container">
-                <div class="grid-item" onclick="openMedia('Image_2aiu2b2aiu2b2aiub.jpg')">
-                    <img src="Image_2aiu2b2aiu2b2aiub.jpg" alt="Foto 1">
-                    <img src="IImage_brzrz9brzrz9brzrd.jpg" alt="Foto 2">
-                    <div class="overlay-text">Foto Ai</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=2')">
-                    <img src="https://picsum.photos/400/300?random=2" alt="Foto 2">
-                    <div class="overlay-text">Foto Kamera</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=3')">
-                    <img src="https://picsum.photos/400/300?random=3" alt="Foto 3">
-                    <div class="overlay-text">Foto 360o</div>
-                </div>
+        <div id="upload-section" class="retro-box">
+            <h3>Unggah Karyamu</h3>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <input type="file" id="file-input" accept="image/*,video/*,application/pdf">
+                <select id="category-select">
+                    <option value="Fotografi">Fotografi</option>
+                    <option value="Video">Video</option>
+                    <option value="Desain">Desain</option>
+                    <option value="3D Desain">3D Desain</option>
+                </select>
+                <button id="upload-btn" class="retro-box" onclick="handleUpload()">Tambahkan Media</button>
             </div>
         </div>
 
-        <div id="video" class="category-section">
-            <div class="grid-container">
-                <div class="grid-item" onclick="openMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')">
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted loop></video>
-                    <div class="overlay-text">Putar Video</div>
+        <main>
+            <div id="media-grid" class="media-grid">
                 </div>
-                <div class="grid-item" onclick="openMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')">
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted loop></video>
-                    <div class="overlay-text">Putar Video</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')">
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" muted loop></video>
-                    <div class="overlay-text">Putar Video</div>
-                </div>
-            </div>
-        </div>
+        </main>
 
-        <div id="desain" class="category-section">
-            <div class="grid-container">
-                <div class="grid-item" onclick="openMedia('pdf', 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf')">
-                    <div style="text-align: center; color: var(--neon-pink); font-size: 2rem;">PDF Portfolio</div>
-                    <div class="overlay-text">Buka PDF</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=4')">
-                    <img src="https://picsum.photos/400/300?random=4" alt="Desain 1">
-                    <div class="overlay-text">Lihat Desain</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=5')">
-                    <img src="https://picsum.photos/400/300?random=5" alt="Desain 2">
-                    <div class="overlay-text">Lihat Desain</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="3d-desain" class="category-section">
-            <div class="grid-container">
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=6')">
-                    <img src="https://picsum.photos/400/300?random=6" alt="3D 1">
-                    <div class="overlay-text">Lihat 3D</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=7')">
-                    <img src="https://picsum.photos/400/300?random=7" alt="3D 2">
-                    <div class="overlay-text">Lihat 3D</div>
-                </div>
-                <div class="grid-item" onclick="openMedia('image', 'https://picsum.photos/800/600?random=8')">
-                    <img src="https://picsum.photos/400/300?random=8" alt="3D 3">
-                    <div class="overlay-text">Lihat 3D</div>
-                </div>
-            </div>
+        <div id="social-toggle" onclick="toggleSocial()">📱</div>
+        <div id="social-menu">
+            <a href="#" class="social-btn retro-box wa-btn">WhatsApp</a>
+            <a href="#" class="social-btn retro-box">Instagram</a>
+            <a href="#" class="social-btn retro-box">Facebook</a>
         </div>
     </div>
 
-    <div id="media-modal">
-        <span class="close-btn" onclick="closeModal('media-modal')">&times;</span>
-        <div class="modal-content" id="media-content">
-            </div>
-    </div>
-
-    <div id="sosmed-modal">
-        <span class="close-btn" onclick="closeModal('sosmed-modal')">&times;</span>
-        <div class="sosmed-box">
-            <h2 style="color: var(--neon-pink); margin-top:0;">HUBUNGI SAYA</h2>
-            <a href="https://wa.me/628000000000" target="_blank">WhatsApp</a>
-            <a href="https://instagram.com" target="_blank">Instagram</a>
-            <a href="https://behance.net" target="_blank">Behance</a>
-        </div>
+    <div id="media-viewer">
+        <div id="close-viewer" onclick="closeViewer()">X</div>
+        <div id="viewer-content"></div>
     </div>
 
     <script>
-        /* === LOGIKA AUDIO SYNTH GITAR === */
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playGuitar(frequency) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+        // === 1. AUDIO SYNTHESIZER (Suara Gitar Retro tanpa file eksternal) ===
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function playGuitarPluck() {
+            if (!audioCtx) audioCtx = new AudioContext();
             const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'triangle'; // Suara pluck mirip retro synth/gitar
-            osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            const gainNode = audioCtx.createGain();
             
-            gain.gain.setValueAtTime(1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.type = 'triangle'; // Meniru resonansi senar
+            osc.frequency.setValueAtTime(Math.random() * 200 + 300, audioCtx.currentTime); // Nada acak
             
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
             osc.start();
             osc.stop(audioCtx.currentTime + 0.5);
         }
 
-        /* === LOGIKA INTRO 'PERMISI' === */
-        const wordToSpell = "PERMISI";
-        const freqs = [329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33]; // Frekuensi nada (E4 ke D5)
-        let currentIndex = 0;
+        // === 2. LOGIKA INTRO (TEKA-TEKI PERMISI) ===
+        const targetWord = "PERMISI";
+        let currentGuess = [];
         const introScreen = document.getElementById('intro-screen');
-        const targetBox = document.getElementById('target-box');
-        let letterElements = [];
+        const slots = document.querySelectorAll('.slot');
 
-        function initIntro() {
-            targetBox.innerHTML = '';
-            const letters = wordToSpell.split('');
-            // Acak urutan huruf untuk ditampilkan di layar
-            const shuffled = [...letters].sort(() => Math.random() - 0.5);
+        function createScatteredLetters() {
+            const letters = targetWord.split('').sort(() => Math.random() - 0.5);
             
-            // Hapus yang lama jika ada (saat reset)
-            letterElements.forEach(el => el.remove());
-            letterElements = [];
+            letters.forEach((char, index) => {
+                const el = document.createElement('div');
+                el.innerText = char;
+                el.className = 'scattered-letter';
+                
+                // Posisi acak (menghindari tepi layar dan area slot bawah)
+                const top = Math.random() * 60 + 10; 
+                const left = Math.random() * 80 + 10;
+                el.style.top = `${top}vh`;
+                el.style.left = `${left}vw`;
 
-            shuffled.forEach((char) => {
-                const span = document.createElement('span');
-                span.innerText = char;
-                span.className = 'scattered-letter';
-                
-                // Posisi acak di layar (batas 10% hingga 80% agar tidak keluar layar)
-                span.style.top = Math.floor(Math.random() * 70 + 10) + '%';
-                span.style.left = Math.floor(Math.random() * 70 + 10) + '%';
-                
-                span.onclick = () => handleLetterClick(span, char);
-                introScreen.appendChild(span);
-                letterElements.push(span);
+                el.onclick = () => {
+                    if (currentGuess.length < 7) {
+                        playGuitarPluck();
+                        el.classList.add('glow');
+                        
+                        setTimeout(() => {
+                            el.style.display = 'none'; // Sembunyikan huruf yang berhamburan
+                            slots[currentGuess.length].innerText = char; // Masukkan ke slot
+                            currentGuess.push(char);
+
+                            // Cek jika sudah 7 huruf
+                            if (currentGuess.length === 7) {
+                                if (currentGuess.join('') === targetWord) {
+                                    unlockWebsite();
+                                } else {
+                                    alert('Kata salah! Silakan coba lagi.');
+                                    resetPuzzle();
+                                }
+                            }
+                        }, 200);
+                    }
+                };
+                introScreen.appendChild(el);
             });
         }
 
-        function handleLetterClick(element, char) {
-            // Cek apakah huruf yang diklik sesuai urutan 'PERMISI'
-            if (char === wordToSpell[currentIndex]) {
-                playGuitar(freqs[currentIndex]); // Mainkan nada
+        function resetPuzzle() {
+            currentGuess = [];
+            slots.forEach(slot => slot.innerText = '');
+            document.querySelectorAll('.scattered-letter').forEach(el => el.remove());
+            createScatteredLetters();
+        }
+
+        function unlockWebsite() {
+            introScreen.style.opacity = '0';
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                document.getElementById('main-screen').style.display = 'block';
+                renderCategory('Fotografi'); // Muat kategori default
+            }, 1000);
+        }
+
+        // Mulai teka-teki
+        createScatteredLetters();
+
+        // === 3. LOGIKA KONTEN & UNGGAH (GALLERY) ===
+        const mediaDatabase = {
+            'Fotografi': [],
+            'Video': [],
+            'Desain': [],
+            '3D Desain': []
+        };
+        let currentCategory = 'Fotografi';
+
+        function changeCategory(category) {
+            currentCategory = category;
+            
+            // Ubah tampilan tombol aktif
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText === category) btn.classList.add('active');
+            });
+
+            // Sinkronisasi dropdown upload dengan tab yang sedang aktif
+            document.getElementById('category-select').value = category;
+            
+            renderCategory(category);
+        }
+
+        function renderCategory(category) {
+            const grid = document.getElementById('media-grid');
+            grid.innerHTML = ''; // Bersihkan grid
+
+            const items = mediaDatabase[category];
+            if (items.length === 0) {
+                grid.innerHTML = `<p style="grid-column: span 3; text-align: center; font-weight:bold;">Belum ada media di kategori ${category}. Silakan unggah!</p>`;
+                return;
+            }
+
+            items.forEach(media => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'media-item retro-box';
+                itemDiv.onclick = () => openViewer(media.url, media.type);
+
+                if (media.type.startsWith('image/')) {
+                    itemDiv.innerHTML = `<img src="${media.url}" alt="Image">`;
+                } else if (media.type.startsWith('video/')) {
+                    itemDiv.innerHTML = `<video src="${media.url}" muted></video>`;
+                } else if (media.type === 'application/pdf') {
+                    itemDiv.innerHTML = `<div class="pdf-label">📄 PDF</div>`;
+                }
+
+                grid.appendChild(itemDiv);
+            });
+        }
+
+        function handleUpload() {
+            const fileInput = document.getElementById('file-input');
+            const categorySelect = document.getElementById('category-select').value;
+            const file = fileInput.files[0];
+
+            if (file) {
+                // Membuat URL lokal sementara (sangat aman, tidak pakai internet)
+                const fileURL = URL.createObjectURL(file);
                 
-                // Pindahkan ke kotak bawah
-                element.className = 'placed-letter';
-                element.style.top = 'auto';
-                element.style.left = 'auto';
-                element.onclick = null; // Nonaktifkan klik
-                targetBox.appendChild(element);
+                mediaDatabase[categorySelect].push({
+                    url: fileURL,
+                    type: file.type
+                });
+
+                alert('Berhasil ditambahkan ke ' + categorySelect);
+                fileInput.value = ''; // Reset input
                 
-                currentIndex++;
-                
-                // Jika sudah komplit, masuk ke website utama
-                if (currentIndex === wordToSpell.length) {
-                    setTimeout(() => {
-                        introScreen.style.display = 'none';
-                        document.getElementById('main-site').style.display = 'block';
-                    }, 800);
+                // Jika sedang di kategori tersebut, render ulang
+                if (currentCategory === categorySelect) {
+                    renderCategory(currentCategory);
                 }
             } else {
-                // Jika salah urutan, mainkan nada rendah & reset
-                playGuitar(150);
-                targetBox.style.borderColor = 'red';
-                setTimeout(() => {
-                    targetBox.style.borderColor = 'var(--neon-cyan)';
-                    currentIndex = 0;
-                    initIntro();
-                }, 400);
+                alert('Pilih file terlebih dahulu!');
             }
         }
 
-        /* === LOGIKA MENU KATEGORI === */
-        function showCategory(categoryId) {
-            // Sembunyikan semua kategori
-            document.querySelectorAll('.category-section').forEach(sec => sec.classList.remove('active'));
-            // Hapus class active dari semua tombol
-            document.querySelectorAll('nav .nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Tampilkan yang dipilih
-            document.getElementById(categoryId).classList.add('active');
-            event.target.classList.add('active');
-        }
+        // === 4. LOGIKA MEDIA VIEWER (LIGHTBOX FULL SIZE) ===
+        const viewer = document.getElementById('media-viewer');
+        const viewerContent = document.getElementById('viewer-content');
 
-        /* === LOGIKA MEDIA VIEWER & MODAL === */
-        const mediaModal = document.getElementById('media-modal');
-        const mediaContent = document.getElementById('media-content');
-        const sosmedModal = document.getElementById('sosmed-modal');
+        function openViewer(url, type) {
+            viewer.style.display = 'flex';
+            viewerContent.innerHTML = ''; // Bersihkan layar
 
-        function openMedia(type, url) {
-            mediaContent.innerHTML = ''; // Bersihkan kontainer
-            if (type === 'image') {
-                mediaContent.innerHTML = `<img src="${url}" alt="Full Media">`;
-            } else if (type === 'video') {
-                mediaContent.innerHTML = `<video src="${url}" controls autoplay></video>`;
-            } else if (type === 'pdf') {
-                mediaContent.innerHTML = `<iframe src="${url}"></iframe>`;
-            }
-            mediaModal.style.display = 'flex';
-        }
-
-        function openSosmed() {
-            sosmedModal.style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            if (modalId === 'media-modal') {
-                mediaContent.innerHTML = ''; // Matikan video/audio saat ditutup
+            if (type.startsWith('image/')) {
+                viewerContent.innerHTML = `<img src="${url}" alt="Fullscreen">`;
+            } else if (type.startsWith('video/')) {
+                viewerContent.innerHTML = `<video src="${url}" controls autoplay></video>`;
+            } else if (type === 'application/pdf') {
+                viewerContent.innerHTML = `<iframe src="${url}" width="100%" height="100%"></iframe>`;
             }
         }
 
-        // Jalankan intro saat pertama kali dimuat
-        window.onload = initIntro;
+        function closeViewer() {
+            viewer.style.display = 'none';
+            viewerContent.innerHTML = ''; // Hapus iframe/video agar suara berhenti
+        }
+
+        // === 5. TOGGLE SOSIAL MEDIA ===
+        function toggleSocial() {
+            const menu = document.getElementById('social-menu');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        }
     </script>
 </body>
 </html>
