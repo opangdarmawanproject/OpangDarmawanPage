@@ -5,520 +5,384 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opang Darmawan - Retro Pop Portfolio</title>
     <style>
-        /* ================= CSS RETRO POP ================= */
-        @import url('https://fonts.googleapis.com/css2?family=Righteous&family=Space+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;800&display=swap');
 
-        :root {
-            --bg-color: #2b00ff;
-            --text-color: #111;
-            --yellow: #fffb00;
-            --pink: #ff007f;
-            --cyan: #00ffff;
-            --box-shadow: 6px 6px 0px #000;
-            --border: 4px solid #000;
-        }
+        /* --- Global Styles --- */
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: #ffe6ff; overflow-x: hidden; color: #000; }
+        * { box-sizing: border-box; }
+        .retro-text { font-family: 'Bangers', cursive; letter-spacing: 2px; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Space Mono', monospace;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(var(--cyan) 15%, transparent 16%), radial-gradient(var(--pink) 15%, transparent 16%);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
-            color: var(--text-color);
-            overflow-x: hidden;
+        /* --- Landing Page Interaktif --- */
+        #landing {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #1a1a2e; z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
-
-        /* --- Intro Screen (PERMISI) --- */
-        #intro-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 10vh;
+        #landing-instruction {
+            position: absolute; top: 10%; color: #fff; font-size: 1.5rem; text-align: center;
+            text-shadow: 2px 2px 0 #ff00ff; z-index: 10;
         }
-        
-        .scattered-letter {
-            position: absolute;
-            font-family: 'Righteous', cursive;
-            font-size: 4rem;
-            color: var(--yellow);
-            text-shadow: 4px 4px 0px var(--pink), -2px -2px 0px var(--cyan);
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.2s, text-shadow 0.2s;
+        #scatter-area { position: absolute; top: 0; left: 0; width: 100%; height: 80%; overflow: hidden;}
+        .scatter-letter {
+            position: absolute; font-size: 5rem; font-family: 'Bangers'; color: #fff;
+            cursor: pointer; user-select: none; transition: transform 0.2s ease, box-shadow 0.3s ease;
+            text-shadow: 4px 4px 0 #ff00ff, -2px -2px 0 #00ffff; padding: 10px;
         }
-
-        .scattered-letter:hover, .scattered-letter.glowing {
-            transform: scale(1.2);
-            text-shadow: 0 0 20px var(--yellow), 4px 4px 0px var(--pink);
+        .scatter-letter:hover { transform: scale(1.2) rotate(10deg); }
+        .scatter-letter.glow {
+            color: #ffff00; text-shadow: 0 0 20px #ffff00, 4px 4px 0 #ff007f; transform: scale(1);
         }
-
-        #assembly-box {
-            display: flex;
-            gap: 10px;
+        .shake { animation: shake 0.3s; }
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        #word-dock {
+            display: flex; gap: 15px; position: absolute; bottom: 10%; height: 100px;
+            border-bottom: 5px dashed #00ffff; padding: 10px; justify-content: center; align-items: flex-end;
             min-width: 300px;
-            height: 80px;
-            border: var(--border);
-            background: #fff;
-            box-shadow: var(--box-shadow);
-            padding: 10px;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
         }
 
         /* --- Main Website --- */
-        #main-content {
-            display: none;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            min-height: 100vh;
-            border-left: var(--border);
-            border-right: var(--border);
-        }
-
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: var(--border);
-            margin-bottom: 30px;
-            background: var(--yellow);
-            box-shadow: var(--box-shadow);
-        }
-
-        header h1 {
-            font-family: 'Righteous', cursive;
-            font-size: 3.5rem;
-            margin: 0;
-            color: var(--pink);
-            text-shadow: 3px 3px 0px #000;
-        }
-
-        .nav-menu {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .retro-btn {
-            background: var(--cyan);
-            border: var(--border);
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px #000;
-            transition: all 0.1s;
-            font-family: inherit;
-        }
-
-        .retro-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px #000;
-        }
-
-        .retro-btn.pink { background: var(--pink); color: white; }
-
-        /* --- 3 Kolam Grid --- */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .card {
-            background: #fff;
-            border: var(--border);
-            box-shadow: var(--box-shadow);
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .card:hover { transform: translateY(-5px); }
-
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border: 2px solid #000;
-            margin-bottom: 10px;
-        }
-
-        .card h3 {
-            font-family: 'Righteous', cursive;
-            font-size: 1.5rem;
-            margin: 10px 0;
-            color: var(--bg-color);
-        }
-
-        .upload-btn {
-            background: #eee;
-            border: 2px solid #000;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        /* --- Modals (Popup) --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: var(--yellow);
-            border: var(--border);
-            box-shadow: 10px 10px 0px #000;
-            padding: 30px;
-            text-align: center;
-            max-width: 90vw;
-            max-height: 90vh;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: -15px; right: -15px;
-            background: var(--pink);
-            color: white;
-            border: var(--border);
-            width: 40px; height: 40px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #media-container {
-            width: 80vw;
-            height: 70vh;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #media-container img, #media-container video, #media-container iframe {
-            max-width: 100%;
-            max-height: 100%;
-            width: 100%;
-            height: 100%;
-        }
+        #main-site { display: none; padding: 20px; max-width: 1200px; margin: auto; animation: fadeIn 1s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .social-links a {
-            display: block;
-            margin: 15px 0;
-            font-size: 1.5rem;
-            color: var(--bg-color);
-            text-decoration: none;
-            font-family: 'Righteous', cursive;
-        }
-        .social-links a:hover { color: var(--pink); }
+        header { text-align: center; padding: 40px 0; border-bottom: 5px solid #000; margin-bottom: 30px; }
+        header h1 { font-size: 4.5rem; color: #ff007f; text-shadow: 5px 5px 0px #000, 10px 10px 0px #00ffff; margin: 0; line-height: 1; }
+        header p { font-size: 1.2rem; font-weight: 600; margin-top: 10px; background: #ffff00; display: inline-block; padding: 5px 15px; border: 3px solid #000; box-shadow: 3px 3px 0 #000;}
 
-        #breadcrumb { margin-top: 20px; font-weight: bold; }
+        /* Menu / Categories */
+        .nav-cats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+        .nav-btn {
+            background: #00ffff; border: 3px solid #000; padding: 10px 25px; font-size: 1.2rem;
+            font-weight: 800; cursor: pointer; box-shadow: 5px 5px 0px #000; transition: 0.2s; text-transform: uppercase;
+        }
+        .nav-btn:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px #000; background: #ffff00; }
+        .nav-btn.active { background: #ff007f; color: white; }
+
+        /* Grid Columns */
+        #back-btn { 
+            display: none; background: #000; color: #fff; border: 3px solid #ff007f; padding: 10px 20px; 
+            font-weight: bold; cursor: pointer; margin-bottom: 20px; box-shadow: 4px 4px 0px #00ffff; 
+        }
+        #back-btn:hover { background: #ff007f; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        
+        /* Cards */
+        .card {
+            background: #fff; border: 4px solid #000; padding: 15px; box-shadow: 8px 8px 0px #000;
+            cursor: pointer; transition: 0.2s; text-align: center; display: flex; flex-direction: column;
+        }
+        .card:hover { background: #ffff00; transform: translateY(-5px); box-shadow: 10px 15px 0px #ff007f; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border: 3px solid #000; margin-bottom: 15px; background: #eee;}
+        .card h3 { margin: 0; font-size: 1.5rem; color: #000; font-family: 'Bangers', cursive; letter-spacing: 1px; }
+
+        /* --- Social Media & WA FAB --- */
+        #social-container { position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 15px; }
+        .social-btn {
+            width: 70px; height: 70px; border-radius: 50%; background: #00ffff; color: #000; border: 4px solid #000;
+            font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 0px #000;
+            display: flex; justify-content: center; align-items: center; text-align: center; transition: 0.2s;
+        }
+        .social-btn:hover { background: #ffff00; transform: scale(1.1); }
+        .social-menu { display: none; flex-direction: column; gap: 10px; }
+        .social-item {
+            padding: 12px 25px; background: #ff007f; border: 3px solid #000; box-shadow: 4px 4px 0px #000;
+            text-decoration: none; color: #fff; font-weight: bold; border-radius: 25px; text-align: center; transition: 0.2s;
+        }
+        .social-item:hover { background: #000; color: #ff007f; }
+
+        /* --- Media Viewer (Modal) --- */
+        #media-modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9);
+            z-index: 10000; display: none; justify-content: center; align-items: center; flex-direction: column;
+        }
+        #close-modal {
+            position: absolute; top: 20px; right: 30px; font-size: 2rem; background: #ff007f; color: #fff;
+            border: 3px solid #fff; padding: 5px 20px; cursor: pointer; font-family: 'Bangers'; box-shadow: 4px 4px 0 #00ffff; z-index: 10001;
+        }
+        #close-modal:hover { background: #ffff00; color: #000; }
+        .media-content-container { width: 90%; height: 85%; display: flex; justify-content: center; align-items: center; position: relative; }
+        .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
+        .media-content-container iframe { width: 100%; height: 100%; border: 5px solid #fff; background: #fff; }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <h2 style="position:absolute; top:20px; color:white; background:black; padding:5px 10px; border:2px solid white;">Klik Huruf untuk Menyusun "PERMISI"</h2>
-        <div id="assembly-box"></div>
+    <div id="landing">
+        <h2 id="landing-instruction" class="retro-text">KLIK HURUF UNTUK MENYUSUN 'PERMISI'</h2>
+        <div id="scatter-area"></div>
+        <div id="word-dock"></div>
     </div>
 
-    <div id="main-content">
+    <div id="main-site">
         <header>
-            <h1>OPANG DARMAWAN</h1>
-            <div class="nav-menu">
-                <button class="retro-btn" onclick="renderLevel1('Fotografi')">FOTOGRAFI</button>
-                <button class="retro-btn" onclick="renderLevel1('Video')">VIDEO</button>
-                <button class="retro-btn" onclick="renderLevel1('Desain')">DESAIN</button>
-                <button class="retro-btn" onclick="renderLevel1('3Ddesain')">3D DESAIN</button>
-                <button class="retro-btn pink" onclick="document.getElementById('social-modal').style.display='flex'">KONTAK</button>
-            </div>
+            <h1 class="retro-text">Opang Darmawan</h1>
+            <p>Portfolio Super Kece</p>
         </header>
 
-        <div id="breadcrumb">Silakan pilih menu di atas!</div>
-        <div id="content-area" class="grid-container">
-            </div>
+        <nav class="nav-cats" id="category-nav"></nav>
+        
+        <button id="back-btn">⬅ KEMBALI KE KATEGORI</button>
+        
+        <div class="grid-3" id="content-area"></div>
     </div>
 
-    <div id="media-modal" class="modal">
-        <div class="modal-content" style="background:#fff;">
-            <button class="close-btn" onclick="closeMedia()">X</button>
-            <div id="media-container"></div>
+    <div id="social-container">
+        <button class="social-btn" id="social-toggle">Hubungi<br>Saya!</button>
+        <div class="social-menu" id="social-menu">
+            <a href="https://wa.me/6281234567890" target="_blank" class="social-item">WhatsApp</a>
+            <a href="https://instagram.com/opangdarmawan" target="_blank" class="social-item">Instagram</a>
         </div>
     </div>
 
-    <div id="social-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="document.getElementById('social-modal').style.display='none'">X</button>
-            <h2 style="font-family:'Righteous', cursive; font-size: 2rem;">HUBUNGI OPANG</h2>
-            <div class="social-links">
-                <a href="https://wa.me/6280000000000" target="_blank">📞 WhatsApp Me</a>
-                <a href="https://instagram.com/" target="_blank">📸 Instagram</a>
-                <a href="https://behance.net/" target="_blank">🎨 Behance Portofolio</a>
-            </div>
-        </div>
+    <div id="media-modal">
+        <button id="close-modal">X CLOSE</button>
+        <div class="media-content-container" id="media-content"></div>
     </div>
 
     <script>
-        // --- 1. AUDIO (GUITAR SYNTH) ---
+        /* ----------------------------------------------------
+           1. LOGIKA LANDING PAGE 'PERMISI' & AUDIO GITAR
+        ---------------------------------------------------- */
+        const targetWord = "PERMISI";
+        let currentIndex = 0;
+        
+        // Frekuensi melodi gitar (C Major Pentatonic yang ceria)
+        const freqs = [329.63, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25]; 
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
+        let audioCtx;
 
-        function playGuitarSound(index) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            // Frequencies for P-E-R-M-I-S-I (Simple major scale)
-            const freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 523.25];
+        function playGuitarNote(freq) {
+            if (!audioCtx) audioCtx = new AudioContext();
             const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            osc.type = 'triangle'; // Terdengar seperti petikan senar vintage
-            osc.frequency.setValueAtTime(freqs[index % freqs.length], audioCtx.currentTime);
-            
-            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-            
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle'; // Suara mirip petikan senar
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + 1.5);
         }
 
-        // --- 2. INTRO LOGIC (PERMISI) ---
-        const targetWord = "PERMISI";
-        let currentWord = "";
-        let attemptCount = 0;
-        const introScreen = document.getElementById('intro-screen');
-        const assemblyBox = document.getElementById('assembly-box');
+        const scatterArea = document.getElementById('scatter-area');
+        const dockArea = document.getElementById('word-dock');
 
-        function initIntro() {
-            assemblyBox.innerHTML = '';
-            currentWord = "";
-            const letters = targetWord.split('');
-            // Acak posisi
-            const shuffledLetters = letters.map((char, i) => ({ char, id: i })).sort(() => Math.random() - 0.5);
+        // Acak posisi huruf
+        let letters = targetWord.split('').map((char, i) => ({ char, id: i }));
+        letters.sort(() => Math.random() - 0.5);
 
-            document.querySelectorAll('.scattered-letter').forEach(el => el.remove());
+        letters.forEach(item => {
+            let el = document.createElement('div');
+            el.className = 'scatter-letter';
+            el.innerText = item.char;
+            // Posisi acak agar menyebar di layar
+            el.style.top = (Math.random() * 60 + 10) + '%';
+            el.style.left = (Math.random() * 70 + 10) + '%';
 
-            shuffledLetters.forEach((item, index) => {
-                let el = document.createElement('div');
-                el.className = 'scattered-letter';
-                el.innerText = item.char;
-                // Posisi acak di layar
-                el.style.left = (Math.random() * 70 + 10) + 'vw';
-                el.style.top = (Math.random() * 60 + 10) + 'vh';
-                
-                el.onclick = () => {
-                    playGuitarSound(currentWord.length);
-                    el.classList.add('glowing');
-                    el.style.position = 'static'; // Masuk ke box
-                    assemblyBox.appendChild(el);
-                    currentWord += item.char;
-                    el.onclick = null; // Matikan klik setelah masuk box
+            el.onclick = () => {
+                // Jika user mengklik huruf yang benar sesuai urutan P-E-R-M-I-S-I
+                if (item.char === targetWord[currentIndex] && el.parentElement === scatterArea) {
+                    playGuitarNote(freqs[currentIndex]);
+                    el.classList.add('glow');
+                    el.style.position = 'relative';
+                    el.style.top = '0'; el.style.left = '0';
+                    dockArea.appendChild(el);
+                    currentIndex++;
 
-                    if (currentWord.length === targetWord.length) {
-                        if (currentWord === targetWord) {
+                    // Jika kata PERMISI sudah selesai tersusun
+                    if (currentIndex === targetWord.length) {
+                        setTimeout(() => {
+                            document.getElementById('landing').style.opacity = '0';
                             setTimeout(() => {
-                                document.getElementById('intro-screen').style.display = 'none';
-                                document.getElementById('main-content').style.display = 'block';
+                                document.getElementById('landing').style.display = 'none';
+                                document.getElementById('main-site').style.display = 'block';
                             }, 500);
-                        } else {
-                            setTimeout(() => {
-                                alert("Susunan salah! Coba susun 'PERMISI'.");
-                                initIntro();
-                            }, 300);
-                        }
+                        }, 800);
                     }
-                };
-                introScreen.appendChild(el);
-            });
-        }
-        initIntro();
+                } else if (el.parentElement === scatterArea) {
+                    // Jika salah klik, huruf bergetar (shake)
+                    el.classList.add('shake');
+                    setTimeout(() => el.classList.remove('shake'), 300);
+                }
+            };
+            scatterArea.appendChild(el);
+        });
 
-        // --- 3. DATA WEBSITE (3 Kolam -> 3 Kolam) ---
-        // Anda bisa mengganti URL gambar default dengan placeholder atau gambar asli Anda
-        const placeholderImg = "https://picsum.photos/600/400?random=";
-        const dummyPdf = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-        const dummyVideo = "https://www.w3schools.com/html/mov_bbb.mp4";
 
-        const siteData = {
+        /* ----------------------------------------------------
+           2. DATA KONTEN (Silakan ganti URL Gambar/Video/PDF disini)
+        ---------------------------------------------------- */
+        const portfolioData = {
             "Fotografi": [
-                { name: "Fotografi AI", cover: placeholderImg+"1", items: [
-                    { name: "Karya AI 1", file: placeholderImg+"11", type: "img" },
-                    { name: "Karya AI 2", file: placeholderImg+"12", type: "img" },
-                    { name: "Karya AI 3", file: placeholderImg+"13", type: "img" }
-                ]},
-                { name: "Fotografi Kamera", cover: placeholderImg+"2", items: [
-                    { name: "Jepretan 1", file: placeholderImg+"14", type: "img" },
-                    { name: "Jepretan 2", file: placeholderImg+"15", type: "img" },
-                    { name: "Jepretan 3", file: placeholderImg+"16", type: "img" }
-                ]},
-                { name: "Komersial", cover: placeholderImg+"3", items: [
-                    { name: "Produk 1", file: placeholderImg+"17", type: "img" },
-                    { name: "Produk 2", file: placeholderImg+"18", type: "img" },
-                    { name: "Produk 3", file: placeholderImg+"19", type: "img" }
-                ]}
+                {
+                    title: "Fotografi AI", 
+                    cover: "https://picsum.photos/400/300?random=1",
+                    items: [
+                        { title: "Karya AI 1", type: "img", src: "https://picsum.photos/1200/800?random=1", cover: "https://picsum.photos/400/300?random=1" },
+                        { title: "Karya AI 2", type: "img", src: "https://picsum.photos/1200/800?random=2", cover: "https://picsum.photos/400/300?random=2" },
+                        { title: "Karya AI 3", type: "img", src: "https://picsum.photos/1200/800?random=3", cover: "https://picsum.photos/400/300?random=3" }
+                    ]
+                },
+                {
+                    title: "Fotografi Kamera", 
+                    cover: "https://picsum.photos/400/300?random=4",
+                    items: [
+                        { title: "Jepretan 1", type: "img", src: "https://picsum.photos/1200/800?random=4", cover: "https://picsum.photos/400/300?random=4" },
+                        { title: "Jepretan 2", type: "img", src: "https://picsum.photos/1200/800?random=5", cover: "https://picsum.photos/400/300?random=5" },
+                        { title: "Jepretan 3", type: "img", src: "https://picsum.photos/1200/800?random=6", cover: "https://picsum.photos/400/300?random=6" }
+                    ]
+                },
+                {
+                    title: "Komersial", 
+                    cover: "https://picsum.photos/400/300?random=7",
+                    items: [
+                        { title: "Produk 1", type: "img", src: "https://picsum.photos/1200/800?random=7", cover: "https://picsum.photos/400/300?random=7" },
+                        { title: "Produk 2", type: "img", src: "https://picsum.photos/1200/800?random=8", cover: "https://picsum.photos/400/300?random=8" },
+                        { title: "Produk 3", type: "img", src: "https://picsum.photos/1200/800?random=9", cover: "https://picsum.photos/400/300?random=9" }
+                    ]
+                }
             ],
             "Video": [
-                { name: "Video Musik", cover: placeholderImg+"4", items: [
-                    { name: "Klip 1", file: dummyVideo, type: "video" },
-                    { name: "Klip 2", file: dummyVideo, type: "video" },
-                    { name: "Klip 3", file: dummyVideo, type: "video" }
-                ]},
-                { name: "Iklan", cover: placeholderImg+"5", items: [
-                    { name: "Iklan 1", file: dummyVideo, type: "video" },
-                    { name: "Iklan 2", file: dummyVideo, type: "video" },
-                    { name: "Iklan 3", file: dummyVideo, type: "video" }
-                ]},
-                { name: "Dokumenter", cover: placeholderImg+"6", items: [
-                    { name: "Doc 1", file: dummyVideo, type: "video" },
-                    { name: "Doc 2", file: dummyVideo, type: "video" },
-                    { name: "Doc 3", file: dummyVideo, type: "video" }
-                ]}
+                {
+                    title: "Video Cinematic", 
+                    cover: "https://picsum.photos/400/300?random=10",
+                    items: [
+                        // Ganti file .mp4 pada atribut 'src'
+                        { title: "Klip 1", type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", cover: "https://picsum.photos/400/300?random=10" },
+                        { title: "Klip 2", type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", cover: "https://picsum.photos/400/300?random=11" },
+                        { title: "Klip 3", type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", cover: "https://picsum.photos/400/300?random=12" }
+                    ]
+                },
+                // Tambahkan subkategori video ke-2 dan ke-3 jika diperlukan
+                { title: "Vlog / Dokumenter", cover: "https://picsum.photos/400/300?random=13", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
+                { title: "Shorts", cover: "https://picsum.photos/400/300?random=14", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
             "Desain": [
-                { name: "Logo & Branding", cover: placeholderImg+"7", items: [
-                    { name: "Brand 1", file: placeholderImg+"20", type: "img" },
-                    { name: "Brand 2", file: placeholderImg+"21", type: "img" },
-                    { name: "Brand 3", file: placeholderImg+"22", type: "img" }
-                ]},
-                { name: "Ilustrasi", cover: placeholderImg+"8", items: [
-                    { name: "Vector 1", file: placeholderImg+"23", type: "img" },
-                    { name: "Vector 2", file: placeholderImg+"24", type: "img" },
-                    { name: "Vector 3", file: placeholderImg+"25", type: "img" }
-                ]},
-                { name: "Dokumen PDF", cover: placeholderImg+"9", items: [
-                    { name: "Majalah", file: dummyPdf, type: "pdf" },
-                    { name: "Brosur", file: dummyPdf, type: "pdf" },
-                    { name: "Katalog", file: dummyPdf, type: "pdf" }
-                ]}
+                {
+                    title: "Brosur / PDF", 
+                    cover: "https://picsum.photos/400/300?random=15",
+                    items: [
+                        // Ganti file .pdf pada atribut 'src'
+                        { title: "Katalog 1 (PDF)", type: "pdf", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", cover: "https://picsum.photos/400/300?random=15" },
+                        { title: "Poster 1", type: "img", src: "https://picsum.photos/1200/800?random=16", cover: "https://picsum.photos/400/300?random=16" },
+                        { title: "Poster 2", type: "img", src: "https://picsum.photos/1200/800?random=17", cover: "https://picsum.photos/400/300?random=17" }
+                    ]
+                },
+                { title: "Logo", cover: "https://picsum.photos/400/300?random=18", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
+                { title: "UI/UX", cover: "https://picsum.photos/400/300?random=19", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
             "3Ddesain": [
-                { name: "Karakter 3D", cover: placeholderImg+"10", items: [
-                    { name: "Hero", file: placeholderImg+"26", type: "img" },
-                    { name: "Monster", file: placeholderImg+"27", type: "img" },
-                    { name: "NPC", file: placeholderImg+"28", type: "img" }
-                ]},
-                { name: "Lingkungan", cover: placeholderImg+"29", items: [
-                    { name: "Kota", file: placeholderImg+"30", type: "img" },
-                    { name: "Hutan", file: placeholderImg+"31", type: "img" },
-                    { name: "Ruang Angkasa", file: placeholderImg+"32", type: "img" }
-                ]},
-                { name: "Animasi 3D", cover: placeholderImg+"33", items: [
-                    { name: "Reel 1", file: dummyVideo, type: "video" },
-                    { name: "Reel 2", file: dummyVideo, type: "video" },
-                    { name: "Reel 3", file: dummyVideo, type: "video" }
-                ]}
+                 {
+                    title: "Karakter", 
+                    cover: "https://picsum.photos/400/300?random=20",
+                    items: [
+                        { title: "Model 1", type: "img", src: "https://picsum.photos/1200/800?random=20", cover: "https://picsum.photos/400/300?random=20" },
+                        { title: "Model 2", type: "img", src: "https://picsum.photos/1200/800?random=21", cover: "https://picsum.photos/400/300?random=21" },
+                        { title: "Model 3", type: "img", src: "https://picsum.photos/1200/800?random=22", cover: "https://picsum.photos/400/300?random=22" }
+                    ]
+                },
+                { title: "Arsitektur", cover: "https://picsum.photos/400/300?random=23", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
+                { title: "Animasi 3D", cover: "https://picsum.photos/400/300?random=24", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ]
         };
 
+        /* ----------------------------------------------------
+           3. LOGIKA NAVIGASI & KOLAM BERJENJANG
+        ---------------------------------------------------- */
+        const navContainer = document.getElementById('category-nav');
         const contentArea = document.getElementById('content-area');
-        const breadcrumb = document.getElementById('breadcrumb');
+        const backBtn = document.getElementById('back-btn');
+        let currentActiveCategory = "";
 
-        // --- 4. LOGIC RENDER KONTEN & UPLOAD COVER ---
-        
-        // Fungsi untuk mengunggah gambar cover sementara ke memori browser
-        function handleCoverUpload(event, imgId) {
-            const file = event.target.files[0];
-            if(file) {
-                const imgURL = URL.createObjectURL(file);
-                document.getElementById(imgId).src = imgURL;
-            }
-        }
+        // Buat Tombol Kategori
+        Object.keys(portfolioData).forEach((cat, index) => {
+            let btn = document.createElement('button');
+            btn.className = 'nav-btn retro-text';
+            btn.innerText = cat;
+            if(index === 0) { btn.classList.add('active'); currentActiveCategory = cat; } // Default open
+            btn.onclick = () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentActiveCategory = cat;
+                renderSubCategories(cat);
+            };
+            navContainer.appendChild(btn);
+        });
 
-        // Level 1: Render 3 Sub-kategori
-        function renderLevel1(categoryName) {
-            breadcrumb.innerHTML = `Kategori: <b>${categoryName}</b>`;
+        // Tampilkan 3 Kolam (Sub Kategori)
+        function renderSubCategories(categoryName) {
             contentArea.innerHTML = '';
-            const subCategories = siteData[categoryName];
-
-            subCategories.forEach((sub, index) => {
-                const uniqueId = `cover-${categoryName}-${index}`;
-                const card = document.createElement('div');
+            backBtn.style.display = 'none';
+            const subCats = portfolioData[categoryName];
+            
+            subCats.forEach((sub, index) => {
+                let card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `
-                    <img src="${sub.cover}" id="${uniqueId}" alt="Cover">
-                    <label class="upload-btn">
-                        Ubah Cover Custom
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleCoverUpload(event, '${uniqueId}')">
-                    </label>
-                    <h3>${sub.name}</h3>
-                    <button class="retro-btn" onclick='renderLevel2(${JSON.stringify(sub.items)}, "${categoryName} > ${sub.name}")'>Lihat ${sub.name}</button>
-                `;
+                card.innerHTML = `<img src="${sub.cover}" alt="Cover"><h3>${sub.title}</h3>`;
+                card.onclick = () => renderItems(categoryName, index);
                 contentArea.appendChild(card);
             });
         }
 
-        // Level 2: Render 3 Item dalam Sub-kategori
-        function renderLevel2(items, pathText) {
-            breadcrumb.innerHTML = `Kategori: <b>${pathText}</b>`;
+        // Tampilkan 3 Kolam Isi (Items dari Sub Kategori)
+        function renderItems(categoryName, subIndex) {
             contentArea.innerHTML = '';
+            backBtn.style.display = 'inline-block';
+            const items = portfolioData[categoryName][subIndex].items;
 
-            items.forEach((item, index) => {
-                const uniqueId = `item-${index}`;
-                const card = document.createElement('div');
+            items.forEach(item => {
+                let card = document.createElement('div');
                 card.className = 'card';
-                
-                // Jika item adalah PDF/Video, beri cover placeholder agar tidak berat
-                let coverImg = item.type === 'img' ? item.file : placeholderImg + (Math.floor(Math.random() * 100));
-
-                card.innerHTML = `
-                    <img src="${coverImg}" id="${uniqueId}" alt="Item Cover">
-                    <label class="upload-btn">
-                        Ubah Cover Custom
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleCoverUpload(event, '${uniqueId}')">
-                    </label>
-                    <h3>${item.name}</h3>
-                    <button class="retro-btn pink" onclick="openMedia('${item.file}', '${item.type}')">Buka Penampil Penuh</button>
-                `;
+                card.innerHTML = `<img src="${item.cover}" alt="Item Cover"><h3>${item.title}</h3>`;
+                card.onclick = () => openMediaModal(item.type, item.src);
                 contentArea.appendChild(card);
             });
         }
 
-        // --- 5. LOGIC MEDIA VIEWER ---
-        const mediaModal = document.getElementById('media-modal');
-        const mediaContainer = document.getElementById('media-container');
+        backBtn.onclick = () => renderSubCategories(currentActiveCategory);
+        renderSubCategories(currentActiveCategory); // Render saat pertama kali
 
-        function openMedia(url, type) {
-            mediaModal.style.display = 'flex';
-            mediaContainer.innerHTML = ''; // Bersihkan dulu
+        /* ----------------------------------------------------
+           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF)
+        ---------------------------------------------------- */
+        const modal = document.getElementById('media-modal');
+        const mediaContent = document.getElementById('media-content');
+        const closeModalBtn = document.getElementById('close-modal');
 
-            if(type === 'img') {
-                mediaContainer.innerHTML = `<img src="${url}" alt="Karya">`;
+        function openMediaModal(type, src) {
+            modal.style.display = 'flex';
+            mediaContent.innerHTML = ''; 
+            if (type === 'img') {
+                mediaContent.innerHTML = `<img src="${src}" alt="Full Media">`;
             } else if (type === 'video') {
-                mediaContainer.innerHTML = `<video src="${url}" controls autoplay></video>`;
+                mediaContent.innerHTML = `<video src="${src}" controls autoplay></video>`;
             } else if (type === 'pdf') {
-                mediaContainer.innerHTML = `<iframe src="${url}" frameborder="0"></iframe>`;
+                mediaContent.innerHTML = `<iframe src="${src}"></iframe>`;
             }
         }
 
-        function closeMedia() {
-            mediaModal.style.display = 'none';
-            mediaContainer.innerHTML = ''; // Menghentikan video/audio saat ditutup
-        }
+        closeModalBtn.onclick = () => {
+            modal.style.display = 'none';
+            mediaContent.innerHTML = ''; // Hapus elemen untuk menghentikan video
+        };
+
+        /* ----------------------------------------------------
+           5. LOGIKA TOGGLE SOCIAL MEDIA & WHATSAPP
+        ---------------------------------------------------- */
+        const socialToggle = document.getElementById('social-toggle');
+        const socialMenu = document.getElementById('social-menu');
+        
+        socialToggle.onclick = () => {
+            if (socialMenu.style.display === 'flex') {
+                socialMenu.style.display = 'none';
+            } else {
+                socialMenu.style.display = 'flex';
+            }
+        };
     </script>
 </body>
 </html>
