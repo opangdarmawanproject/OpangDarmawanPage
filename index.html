@@ -3,450 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro Pop Portfolio</title>
+    <title>Retro Pop Portofolio</title>
     <style>
-        /* === FONT & ROOT STYLES === */
-        @import url('https://fonts.googleapis.com/css2?family=Righteous&family=Space+Grotesk:wght@400;700&display=swap');
-        
+        /* --- TEMA RETRO POP --- */
         :root {
-            --hot-pink: #ff007b;
-            --cyan: #00f0ff;
-            --yellow: #ffd900;
-            --lime: #00ff73;
-            --dark: #1a1a1a;
+            --bg-color: #FFDE00;
+            --pink: #FF007F;
+            --cyan: #00F3FF;
+            --dark: #1A1A1A;
+            --font-main: 'Courier New', Courier, monospace;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--yellow);
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
             color: var(--dark);
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .retro-font { font-family: 'Righteous', cursive; }
-
-        /* Gaya Kotak Retro (Brutalism/Pop Art) */
-        .retro-box {
-            border: 4px solid var(--dark);
-            box-shadow: 8px 8px 0px var(--dark);
-            background: white;
-            border-radius: 0;
+        /* --- HALAMAN INTRO (PERMISI) --- */
+        #intro-page {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle, var(--bg-color) 0%, #ff9a00 100%);
+            z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* === HALAMAN INTRO (TEKA-TEKI PERMISI) === */
-        #intro-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: var(--hot-pink);
-            background-image: radial-gradient(var(--dark) 2px, transparent 2px);
-            background-size: 30px 30px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            padding-bottom: 10vh;
-            transition: opacity 1s ease-out;
+        .instruction {
+            font-size: 1.2rem; font-weight: bold; background: var(--dark);
+            color: var(--cyan); padding: 10px 20px; border: 3px solid var(--pink);
+            box-shadow: 5px 5px 0px var(--pink); margin-bottom: 30px; text-align: center;
         }
 
-        .scattered-letter {
-            position: absolute;
-            font-size: 5rem;
-            font-family: 'Righteous', cursive;
-            color: var(--cyan);
-            -webkit-text-stroke: 2px var(--dark);
-            text-shadow: 4px 4px 0px var(--dark);
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s;
-        }
-
-        .scattered-letter:hover, .scattered-letter.glow {
-            color: white;
-            text-shadow: 0 0 15px white, 0 0 30px var(--cyan), 4px 4px 0px var(--dark);
-            transform: scale(1.2) rotate(10deg);
-        }
-
-        #slots-container {
-            display: flex;
-            gap: 10px;
-            background: rgba(0,0,0,0.5);
-            padding: 20px;
-            border-radius: 10px;
-            border: 4px dashed var(--yellow);
+        #drop-zone {
+            display: flex; gap: 10px; margin-bottom: 50px; min-height: 80px;
         }
 
         .slot {
-            width: 60px; height: 80px;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3rem;
-            font-family: 'Righteous', cursive;
-            color: var(--yellow);
-            text-shadow: 2px 2px 0px var(--dark);
-        }
-
-        /* === HALAMAN UTAMA === */
-        #main-screen { display: none; padding: 20px; }
-        
-        header {
-            text-align: center;
-            padding: 40px 20px;
-            background: var(--cyan);
-            margin-bottom: 20px;
-        }
-
-        header h1 { font-size: 4rem; margin: 0; text-transform: uppercase; letter-spacing: 5px; color: white; -webkit-text-stroke: 2px var(--dark); text-shadow: 6px 6px 0px var(--dark);}
-
-        /* Navigasi Kategori */
-        nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
-        .nav-btn {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            font-family: 'Righteous', cursive;
-            background: var(--hot-pink);
-            color: white;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .nav-btn:active { transform: translate(4px, 4px); box-shadow: 4px 4px 0px var(--dark); }
-        .nav-btn.active { background: var(--lime); color: var(--dark); }
-
-        /* Form Upload */
-        #upload-section {
-            background: #fff;
-            padding: 20px;
-            margin: 0 auto 30px auto;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-        #upload-section input, #upload-section select, #upload-section button {
-            padding: 10px; font-size: 1rem; border: 2px solid var(--dark); font-family: 'Space Grotesk', sans-serif;
-        }
-        #upload-btn { background: var(--cyan); font-weight: bold; cursor: pointer; }
-        #upload-btn:hover { background: var(--yellow); }
-
-        /* Grid Media (3 Kolom) */
-        .media-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .media-item {
-            aspect-ratio: 1;
-            background: #eee;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .media-item img, .media-item video {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;
-        }
-        .media-item:hover img, .media-item:hover video { transform: scale(1.1); }
-        .media-item .pdf-label {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            width: 60px; height: 80px; border: 3px dashed var(--dark);
             display: flex; justify-content: center; align-items: center;
-            background: var(--hot-pink); color: white; font-size: 2rem; font-family: 'Righteous';
+            font-size: 2.5rem; font-weight: bold; color: var(--dark);
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* === MEDIA VIEWER (LIGHTBOX) === */
-        #media-viewer {
+        #scatter-area {
+            position: relative; width: 100%; max-width: 600px; height: 300px;
+        }
+
+        .letter {
+            position: absolute; font-size: 3rem; font-weight: 900;
+            cursor: pointer; user-select: none; transition: 0.2s;
+            color: var(--dark);
+            text-shadow: 3px 3px 0px var(--cyan), 6px 6px 0px var(--pink);
+        }
+
+        .letter:hover { transform: scale(1.2); }
+        .letter.glow {
+            color: #fff;
+            text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--pink), 0 0 30px var(--pink);
+        }
+
+        /* --- HALAMAN UTAMA --- */
+        #main-page { display: none; padding: 20px; }
+
+        header {
+            text-align: center; margin-bottom: 30px;
+            border-bottom: 5px solid var(--dark); padding-bottom: 20px;
+        }
+
+        h1.title {
+            font-size: 3rem; color: var(--pink); text-transform: uppercase;
+            text-shadow: 4px 4px 0px var(--cyan), 8px 8px 0px var(--dark);
+            margin: 0;
+        }
+
+        nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        nav button {
+            background: var(--cyan); border: 3px solid var(--dark);
+            padding: 10px 20px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            box-shadow: 4px 4px 0px var(--dark); transition: 0.1s;
+        }
+        nav button:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--dark); }
+        nav button.active-tab { background: var(--pink); color: white; }
+
+        /* Kategori Konten (3 Kolom) */
+        .category-content {
+            display: none; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .category-content.active { display: grid; }
+        
+        .media-card {
+            border: 4px solid var(--dark); background: #fff; height: 250px;
+            box-shadow: 5px 5px 0px var(--pink); cursor: pointer;
+            overflow: hidden; position: relative; transition: 0.2s;
+            display: flex; justify-content: center; align-items: center; text-align: center;
+        }
+        .media-card:hover { transform: scale(1.02); }
+        .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; }
+        .media-card .pdf-icon { font-size: 4rem; color: #ff0000; }
+
+        /* --- SOSIAL MEDIA & ADMIN --- */
+        .floating-btn {
+            position: fixed; bottom: 20px; padding: 15px 25px;
+            font-size: 1.2rem; font-weight: bold; border: 3px solid var(--dark);
+            cursor: pointer; box-shadow: 4px 4px 0px var(--dark); z-index: 100;
+        }
+        #btn-social { left: 20px; background: #25D366; color: white; }
+        #btn-admin { right: 20px; background: var(--cyan); color: var(--dark); }
+
+        /* --- MODAL (VIEWER & FORM) --- */
+        .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;
+            background: rgba(26, 26, 26, 0.9); z-index: 2000;
+            justify-content: center; align-items: center; flex-direction: column;
         }
-        #viewer-content { width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; }
-        #viewer-content img, #viewer-content video, #viewer-content iframe {
-            max-width: 100%; max-height: 100%; border: 4px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        .modal-content {
+            background: var(--bg-color); border: 5px solid var(--dark);
+            padding: 30px; max-width: 90%; max-height: 90%; text-align: center;
+            box-shadow: 10px 10px 0px var(--pink); overflow-y: auto;
         }
-        #close-viewer {
-            position: absolute; top: 20px; right: 30px; font-size: 3rem; color: var(--hot-pink);
-            cursor: pointer; font-family: sans-serif; font-weight: bold; text-shadow: 2px 2px 0 white;
+        .close-btn {
+            background: var(--pink); color: white; border: 3px solid var(--dark);
+            padding: 10px 20px; font-size: 1.2rem; cursor: pointer; margin-bottom: 20px;
+            box-shadow: 4px 4px 0px var(--dark);
         }
 
-        /* === SOSIAL MEDIA FLOATING === */
-        #social-toggle {
-            position: fixed; bottom: 30px; right: 30px;
-            width: 60px; height: 60px; border-radius: 50%;
-            background: var(--lime); display: flex; justify-content: center; align-items: center;
-            font-size: 2rem; cursor: pointer; z-index: 9000; border: 3px solid var(--dark);
+        /* Media Viewer Specifics */
+        #viewer-container { width: 80vw; height: 70vh; display: flex; justify-content: center; align-items: center; }
+        #viewer-container img, #viewer-container video, #viewer-container iframe {
+            max-width: 100%; max-height: 100%; border: 4px solid var(--dark);
         }
-        #social-menu {
-            display: none; position: fixed; bottom: 100px; right: 30px;
-            flex-direction: column; gap: 10px; z-index: 9000;
-        }
-        .social-btn {
-            padding: 10px 20px; background: white; text-decoration: none; color: var(--dark);
-            font-weight: bold; font-family: 'Righteous'; text-align: center;
-        }
-        .wa-btn { background: #25D366; color: white;}
 
-        /* Responsive */
+        /* Form Upload Specifics */
+        .upload-form { display: flex; flex-direction: column; gap: 15px; text-align: left; }
+        .upload-form input, .upload-form select {
+            padding: 10px; font-size: 1rem; border: 3px solid var(--dark);
+        }
+        .upload-form button {
+            background: var(--cyan); padding: 15px; font-size: 1.2rem; font-weight: bold; border: 3px solid var(--dark); cursor: pointer;
+        }
+
         @media (max-width: 768px) {
-            .media-grid { grid-template-columns: repeat(1, 1fr); }
-            header h1 { font-size: 2.5rem; }
+            .category-content { grid-template-columns: repeat(1, 1fr); }
+            .slot { width: 40px; height: 60px; font-size: 1.8rem; }
+            #scatter-area { height: 400px; }
+            .floating-btn { font-size: 1rem; padding: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="intro-screen">
-        <h2 style="color: white; margin-bottom: 20px; text-shadow: 2px 2px #000;">Susun Kata Ini</h2>
-        <div id="slots-container">
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="slot"></div><div class="slot"></div><div class="slot"></div>
-            <div class="slot"></div>
+    <div id="intro-page">
+        <div class="instruction">KLIK HURUF UNTUK MENYUSUN "PERMISI"</div>
+        <div id="drop-zone">
+            <div class="slot" id="slot-0"></div><div class="slot" id="slot-1"></div>
+            <div class="slot" id="slot-2"></div><div class="slot" id="slot-3"></div>
+            <div class="slot" id="slot-4"></div><div class="slot" id="slot-5"></div>
+            <div class="slot" id="slot-6"></div>
+        </div>
+        <div id="scatter-area"></div>
+    </div>
+
+    <div id="main-page">
+        <header>
+            <h1 class="title">RETRO POP HUB</h1>
+            <nav>
+                <button class="tab-btn active-tab" onclick="openTab('Fotografi')">Fotografi</button>
+                <button class="tab-btn" onclick="openTab('Video')">Video</button>
+                <button class="tab-btn" onclick="openTab('Desain')">Desain</button>
+                <button class="tab-btn" onclick="openTab('3DDesain')">3D Desain</button>
+            </nav>
+        </header>
+
+        <main id="content-area">
+            <div id="Fotografi" class="category-content active"></div>
+            <div id="Video" class="category-content"></div>
+            <div id="Desain" class="category-content"></div>
+            <div id="3DDesain" class="category-content"></div>
+        </main>
+
+        <button id="btn-social" class="floating-btn" onclick="document.getElementById('modal-social').style.display='flex'">Sosial Media & WA</button>
+        <button id="btn-admin" class="floating-btn" onclick="document.getElementById('modal-admin').style.display='flex'">Upload (Admin)</button>
+    </div>
+
+    <div id="modal-social" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="document.getElementById('modal-social').style.display='none'">CLOSE</button>
+            <h2>Kontak Saya</h2>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <a href="https://wa.me/6280000000000" target="_blank" style="background:#25D366; color:white; padding:15px; text-decoration:none; font-weight:bold; border:3px solid var(--dark);">WhatsApp</a>
+                <a href="https://instagram.com/username" target="_blank" style="background:#E1306C; color:white; padding:15px; text-decoration:none; font-weight:bold; border:3px solid var(--dark);">Instagram</a>
+                <a href="https://twitter.com/username" target="_blank" style="background:#1DA1F2; color:white; padding:15px; text-decoration:none; font-weight:bold; border:3px solid var(--dark);">Twitter / X</a>
+            </div>
         </div>
     </div>
 
-    <div id="main-screen">
-        <header class="retro-box">
-            <h1>Retro Portofolio</h1>
-            <p style="font-weight: bold;">Estetika Pop Art & Kreativitas Tanpa Batas</p>
-        </header>
-
-        <nav>
-            <div class="nav-btn retro-box active" onclick="changeCategory('Fotografi')">Fotografi</div>
-            <div class="nav-btn retro-box" onclick="changeCategory('Video')">Video</div>
-            <div class="nav-btn retro-box" onclick="changeCategory('Desain')">Desain</div>
-            <div class="nav-btn retro-box" onclick="changeCategory('3D Desain')">3D Desain</div>
-        </nav>
-
-        <div id="upload-section" class="retro-box">
-            <h3>Unggah Karyamu</h3>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                <input type="file" id="file-input" accept="image/*,video/*,application/pdf">
-                <select id="category-select">
+    <div id="modal-admin" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="document.getElementById('modal-admin').style.display='none'">CLOSE</button>
+            <h2>Upload Media (Local Storage)</h2>
+            <div class="upload-form">
+                <label>Pilih Kategori:</label>
+                <select id="upload-category">
                     <option value="Fotografi">Fotografi</option>
                     <option value="Video">Video</option>
                     <option value="Desain">Desain</option>
-                    <option value="3D Desain">3D Desain</option>
+                    <option value="3DDesain">3D Desain</option>
                 </select>
-                <button id="upload-btn" class="retro-box" onclick="handleUpload()">Tambahkan Media</button>
+                <label>Pilih File (Gambar, Video, atau PDF):</label>
+                <input type="file" id="upload-file" accept="image/*,video/*,application/pdf">
+                <button onclick="handleUpload()">UPLOAD SEKARANG</button>
+                <small style="color:red; font-weight:bold;">*Maks file 2MB untuk menghindari limit Local Storage browser.</small>
             </div>
-        </div>
-
-        <main>
-            <div id="media-grid" class="media-grid">
-                </div>
-        </main>
-
-        <div id="social-toggle" onclick="toggleSocial()">📱</div>
-        <div id="social-menu">
-            <a href="#" class="social-btn retro-box wa-btn">WhatsApp</a>
-            <a href="#" class="social-btn retro-box">Instagram</a>
-            <a href="#" class="social-btn retro-box">Facebook</a>
         </div>
     </div>
 
-    <div id="media-viewer">
-        <div id="close-viewer" onclick="closeViewer()">X</div>
-        <div id="viewer-content"></div>
+    <div id="modal-viewer" class="modal">
+        <div class="modal-content" style="background:transparent; border:none; box-shadow:none;">
+            <button class="close-btn" onclick="closeViewer()">CLOSE VIEWER</button>
+            <div id="viewer-container"></div>
+        </div>
     </div>
 
     <script>
-        // === 1. AUDIO SYNTHESIZER (Suara Gitar Retro tanpa file eksternal) ===
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        /* ===============================
+           1. SISTEM INTRO "PERMISI"
+        ================================== */
+        const targetWord = "PERMISI";
+        let currentIndex = 0;
+        const scatterArea = document.getElementById('scatter-area');
+        
+        // Setup Audio Context untuk Bunyi Gitar (Synth)
         let audioCtx;
-
-        function playGuitarPluck() {
-            if (!audioCtx) audioCtx = new AudioContext();
+        function playGuitarSound(freq) {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle'; // Suara mirip petikan
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
             
-            osc.type = 'triangle'; // Meniru resonansi senar
-            osc.frequency.setValueAtTime(Math.random() * 200 + 300, audioCtx.currentTime); // Nada acak
-            
-            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-            
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
             
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+            osc.stop(audioCtx.currentTime + 0.8);
         }
 
-        // === 2. LOGIKA INTRO (TEKA-TEKI PERMISI) ===
-        const targetWord = "PERMISI";
-        let currentGuess = [];
-        const introScreen = document.getElementById('intro-screen');
-        const slots = document.querySelectorAll('.slot');
-
-        function createScatteredLetters() {
-            const letters = targetWord.split('').sort(() => Math.random() - 0.5);
+        // Frekuensi nada untuk masing-masing huruf (Tangga nada C Mayor)
+        const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88]; 
+        const lettersObj = targetWord.split('').map((char, i) => ({ char, freq: notes[i] }));
+        
+        // Acak posisi huruf
+        lettersObj.sort(() => Math.random() - 0.5).forEach((item, index) => {
+            let el = document.createElement('div');
+            el.className = 'letter';
+            el.innerText = item.char;
+            // Posisi acak di dalam area
+            el.style.left = Math.floor(Math.random() * 80) + '%';
+            el.style.top = Math.floor(Math.random() * 80) + '%';
             
-            letters.forEach((char, index) => {
-                const el = document.createElement('div');
-                el.innerText = char;
-                el.className = 'scattered-letter';
+            el.onclick = function() {
+                if(this.classList.contains('glow')) return; // Sudah diklik
                 
-                // Posisi acak (menghindari tepi layar dan area slot bawah)
-                const top = Math.random() * 60 + 10; 
-                const left = Math.random() * 80 + 10;
-                el.style.top = `${top}vh`;
-                el.style.left = `${left}vw`;
-
-                el.onclick = () => {
-                    if (currentGuess.length < 7) {
-                        playGuitarPluck();
-                        el.classList.add('glow');
-                        
+                // Cek apakah huruf yang diklik sesuai urutan PERMISI
+                if(this.innerText === targetWord[currentIndex]) {
+                    this.classList.add('glow');
+                    playGuitarSound(item.freq);
+                    
+                    // Pindahkan huruf ke slot
+                    const slot = document.getElementById('slot-' + currentIndex);
+                    slot.innerText = this.innerText;
+                    this.style.display = 'none'; // Sembunyikan yang di area acak
+                    
+                    currentIndex++;
+                    
+                    // Jika selesai
+                    if(currentIndex === targetWord.length) {
                         setTimeout(() => {
-                            el.style.display = 'none'; // Sembunyikan huruf yang berhamburan
-                            slots[currentGuess.length].innerText = char; // Masukkan ke slot
-                            currentGuess.push(char);
-
-                            // Cek jika sudah 7 huruf
-                            if (currentGuess.length === 7) {
-                                if (currentGuess.join('') === targetWord) {
-                                    unlockWebsite();
-                                } else {
-                                    alert('Kata salah! Silakan coba lagi.');
-                                    resetPuzzle();
-                                }
-                            }
-                        }, 200);
+                            document.getElementById('intro-page').style.display = 'none';
+                            document.getElementById('main-page').style.display = 'block';
+                            loadContent(); // Load data dari local storage
+                        }, 1000);
                     }
-                };
-                introScreen.appendChild(el);
-            });
-        }
-
-        function resetPuzzle() {
-            currentGuess = [];
-            slots.forEach(slot => slot.innerText = '');
-            document.querySelectorAll('.scattered-letter').forEach(el => el.remove());
-            createScatteredLetters();
-        }
-
-        function unlockWebsite() {
-            introScreen.style.opacity = '0';
-            setTimeout(() => {
-                introScreen.style.display = 'none';
-                document.getElementById('main-screen').style.display = 'block';
-                renderCategory('Fotografi'); // Muat kategori default
-            }, 1000);
-        }
-
-        // Mulai teka-teki
-        createScatteredLetters();
-
-        // === 3. LOGIKA KONTEN & UNGGAH (GALLERY) ===
-        const mediaDatabase = {
-            'Fotografi': [],
-            'Video': [],
-            'Desain': [],
-            '3D Desain': []
-        };
-        let currentCategory = 'Fotografi';
-
-        function changeCategory(category) {
-            currentCategory = category;
-            
-            // Ubah tampilan tombol aktif
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText === category) btn.classList.add('active');
-            });
-
-            // Sinkronisasi dropdown upload dengan tab yang sedang aktif
-            document.getElementById('category-select').value = category;
-            
-            renderCategory(category);
-        }
-
-        function renderCategory(category) {
-            const grid = document.getElementById('media-grid');
-            grid.innerHTML = ''; // Bersihkan grid
-
-            const items = mediaDatabase[category];
-            if (items.length === 0) {
-                grid.innerHTML = `<p style="grid-column: span 3; text-align: center; font-weight:bold;">Belum ada media di kategori ${category}. Silakan unggah!</p>`;
-                return;
-            }
-
-            items.forEach(media => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'media-item retro-box';
-                itemDiv.onclick = () => openViewer(media.url, media.type);
-
-                if (media.type.startsWith('image/')) {
-                    itemDiv.innerHTML = `<img src="${media.url}" alt="Image">`;
-                } else if (media.type.startsWith('video/')) {
-                    itemDiv.innerHTML = `<video src="${media.url}" muted></video>`;
-                } else if (media.type === 'application/pdf') {
-                    itemDiv.innerHTML = `<div class="pdf-label">📄 PDF</div>`;
+                } else {
+                    // Bunyi salah (low pitch)
+                    playGuitarSound(100);
+                    // Efek getar salah (animasi css inline)
+                    this.style.transform = "translateX(10px)";
+                    setTimeout(() => this.style.transform = "translateX(0)", 150);
                 }
+            };
+            scatterArea.appendChild(el);
+        });
 
-                grid.appendChild(itemDiv);
+        /* ===============================
+           2. SISTEM TAB KATEGORI
+        ================================== */
+        function openTab(categoryName) {
+            // Sembunyikan semua konten
+            document.querySelectorAll('.category-content').forEach(tab => {
+                tab.classList.remove('active');
             });
+            // Reset warna tombol
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab');
+            });
+            
+            // Tampilkan yang dipilih
+            document.getElementById(categoryName).classList.add('active');
+            event.target.classList.add('active-tab');
         }
 
+        /* ===============================
+           3. SISTEM UPLOAD & RENDER (LOCAL STORAGE)
+        ================================== */
+        // Struktur Data: { Fotografi: [{type: 'image', src: 'base64...'}], Video: [...], ... }
+        
         function handleUpload() {
-            const fileInput = document.getElementById('file-input');
-            const categorySelect = document.getElementById('category-select').value;
+            const category = document.getElementById('upload-category').value;
+            const fileInput = document.getElementById('upload-file');
+            
+            if(fileInput.files.length === 0) {
+                alert("Pilih file terlebih dahulu!"); return;
+            }
+            
             const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                let fileType = 'image';
+                if(file.type.startsWith('video')) fileType = 'video';
+                else if(file.type === 'application/pdf') fileType = 'pdf';
 
-            if (file) {
-                // Membuat URL lokal sementara (sangat aman, tidak pakai internet)
-                const fileURL = URL.createObjectURL(file);
+                const newItem = { type: fileType, src: base64Data };
                 
-                mediaDatabase[categorySelect].push({
-                    url: fileURL,
-                    type: file.type
-                });
-
-                alert('Berhasil ditambahkan ke ' + categorySelect);
-                fileInput.value = ''; // Reset input
+                // Ambil data lama
+                let storedData = JSON.parse(localStorage.getItem('retroPopData')) || { Fotografi: [], Video: [], Desain: [], "3DDesain": [] };
+                storedData[category].push(newItem);
                 
-                // Jika sedang di kategori tersebut, render ulang
-                if (currentCategory === categorySelect) {
-                    renderCategory(currentCategory);
+                try {
+                    localStorage.setItem('retroPopData', JSON.stringify(storedData));
+                    alert("Berhasil diupload!");
+                    document.getElementById('modal-admin').style.display = 'none';
+                    fileInput.value = ''; // reset
+                    loadContent(); // Refresh grid
+                } catch(e) {
+                    alert("Gagal menyimpan! Memori Local Storage penuh. Ukuran file terlalu besar.");
                 }
-            } else {
-                alert('Pilih file terlebih dahulu!');
+            };
+            reader.readAsDataURL(file); // Convert file ke Base64 (Teks)
+        }
+
+        function loadContent() {
+            const storedData = JSON.parse(localStorage.getItem('retroPopData')) || { Fotografi: [], Video: [], Desain: [], "3DDesain": [] };
+            
+            for(const [category, items] of Object.entries(storedData)) {
+                const container = document.getElementById(category);
+                container.innerHTML = ''; // Bersihkan dulu
+                
+                items.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'media-card';
+                    card.onclick = () => openViewer(item.type, item.src);
+                    
+                    if(item.type === 'image') {
+                        card.innerHTML = `<img src="${item.src}" alt="img">`;
+                    } else if(item.type === 'video') {
+                        card.innerHTML = `<video src="${item.src}" muted></video>`;
+                    } else if(item.type === 'pdf') {
+                        card.innerHTML = `<div class="pdf-icon">📄<br><span style="font-size:1rem; color:#111">PDF</span></div>`;
+                    }
+                    container.appendChild(card);
+                });
             }
         }
 
-        // === 4. LOGIKA MEDIA VIEWER (LIGHTBOX FULL SIZE) ===
-        const viewer = document.getElementById('media-viewer');
-        const viewerContent = document.getElementById('viewer-content');
-
-        function openViewer(url, type) {
-            viewer.style.display = 'flex';
-            viewerContent.innerHTML = ''; // Bersihkan layar
-
-            if (type.startsWith('image/')) {
-                viewerContent.innerHTML = `<img src="${url}" alt="Fullscreen">`;
-            } else if (type.startsWith('video/')) {
-                viewerContent.innerHTML = `<video src="${url}" controls autoplay></video>`;
-            } else if (type === 'application/pdf') {
-                viewerContent.innerHTML = `<iframe src="${url}" width="100%" height="100%"></iframe>`;
+        /* ===============================
+           4. SISTEM PENAMPIL MEDIA (VIEWER)
+        ================================== */
+        function openViewer(type, src) {
+            const viewerContainer = document.getElementById('viewer-container');
+            viewerContainer.innerHTML = ''; // Bersihkan
+            
+            if(type === 'image') {
+                viewerContainer.innerHTML = `<img src="${src}" alt="Full Image">`;
+            } else if(type === 'video') {
+                viewerContainer.innerHTML = `<video src="${src}" controls autoplay></video>`;
+            } else if(type === 'pdf') {
+                viewerContainer.innerHTML = `<iframe src="${src}" width="100%" height="100%"></iframe>`;
             }
+            
+            document.getElementById('modal-viewer').style.display = 'flex';
         }
 
         function closeViewer() {
-            viewer.style.display = 'none';
-            viewerContent.innerHTML = ''; // Hapus iframe/video agar suara berhenti
+            document.getElementById('viewer-container').innerHTML = ''; // Hentikan video/audio
+            document.getElementById('modal-viewer').style.display = 'none';
         }
 
-        // === 5. TOGGLE SOSIAL MEDIA ===
-        function toggleSocial() {
-            const menu = document.getElementById('social-menu');
-            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
-        }
     </script>
 </body>
 </html>
