@@ -327,42 +327,42 @@
                 { title: "Animasi 3D", cover: "https://picsum.photos/400/300?random=24", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
             
-            // --- KATEGORI: PRODUK ---
+            // --- KATEGORI BARU: PRODUK (DIRECT LINK) ---
             "Produk": [
                 {
                     title: "Video",
                     cover: "https://picsum.photos/400/300?random=100",
                     items: [
-                        { title: "Produk Video 1", type: "iframe-link", src: "https://payhip.com/b/hUGuA" },
-                        { title: "Produk Video 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=102" },
-                        { title: "Produk Video 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=103" }
+                        { title: "Produk Video 1", type: "direct-link", src: "https://payhip.com/b/hUGuA", cover: "https://picsum.photos/400/300?random=101" },
+                        { title: "Produk Video 2", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=102" },
+                        { title: "Produk Video 3", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=103" }
                     ]
                 },
                 {
                     title: "Foto",
                     cover: "https://picsum.photos/400/300?random=104",
                     items: [
-                        { title: "Produk Foto 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=105" },
-                        { title: "Produk Foto 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=106" },
-                        { title: "Produk Foto 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=107" }
+                        { title: "Produk Foto 1", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=105" },
+                        { title: "Produk Foto 2", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=106" },
+                        { title: "Produk Foto 3", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=107" }
                     ]
                 },
                 {
                     title: "PowerPoint",
                     cover: "https://picsum.photos/400/300?random=108",
                     items: [
-                        { title: "Presentasi 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=109" },
-                        { title: "Presentasi 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=110" },
-                        { title: "Presentasi 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=111" }
+                        { title: "Presentasi 1", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=109" },
+                        { title: "Presentasi 2", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=110" },
+                        { title: "Presentasi 3", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=111" }
                     ]
                 },
                 {
                     title: "Png",
                     cover: "https://picsum.photos/400/300?random=112",
                     items: [
-                        { title: "Gambar PNG 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=113" },
-                        { title: "Gambar PNG 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=114" },
-                        { title: "Gambar PNG 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=115" }
+                        { title: "Gambar PNG 1", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=113" },
+                        { title: "Gambar PNG 2", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=114" },
+                        { title: "Gambar PNG 3", type: "direct-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=115" }
                     ]
                 }
             ]
@@ -413,7 +413,16 @@
                 let card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `<img src="${item.cover}" alt="Item Cover"><h3>${item.title}</h3>`;
-                card.onclick = () => openMediaModal(item.type, item.src);
+                
+                // LOGIKA BARU: Cek jika tipenya 'direct-link', langsung buka di tab baru
+                card.onclick = () => {
+                    if (item.type === 'direct-link') {
+                        window.open(item.src, '_blank');
+                    } else {
+                        openMediaModal(item.type, item.src);
+                    }
+                };
+                
                 contentArea.appendChild(card);
             });
         }
@@ -475,16 +484,6 @@
             } else if (type === 'sketchfab') {
                 const sketchfabUrl = formatSketchfabUrl(src);
                 mediaContent.innerHTML = `<iframe title="3D model" src="${sketchfabUrl}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
-            
-            // --- LOGIKA BARU: IFRAME LINK DENGAN TOMBOL CADANGAN ---
-            } else if (type === 'iframe-link') {
-                mediaContent.innerHTML = `
-                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <iframe src="${src}" title="Tampilan Eksternal" frameborder="0" allowfullscreen style="width: 100%; max-width: 1000px; height: 85%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;"></iframe>
-                        <p style="color: #fff; font-family: 'Poppins'; text-align: center; margin-top: 15px; font-weight: bold;">Layar Kosong?</p>
-                        <a href="${src}" target="_blank" style="padding: 10px 25px; background: #ffff00; color: #000; text-decoration: none; font-family: 'Bangers'; font-size: 1.2rem; border: 3px solid #000; box-shadow: 4px 4px 0 #00ffff; transition: 0.2s; border-radius: 5px;">🚀 BUKA LINK DI TAB BARU</a>
-                    </div>
-                `;
             }
         }
 
