@@ -10,6 +10,24 @@
         /* --- Global Styles --- */
         body { margin: 0; font-family: 'Poppins', sans-serif; background: #ffe6ff; overflow-x: hidden; color: #000; }
         * { box-sizing: border-box; }
+        
+        /* ====================================================
+           LAPISAN KEAMANAN 1: PROTEKSI CSS UNTUK GAMBAR
+           Mencegah drag, seleksi, dan klik-tahan di layar sentuh
+        ==================================================== */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: none; /* Mematikan interaksi kursor pada gambar */
+        }
+
         .retro-text { font-family: 'Bangers', cursive; letter-spacing: 2px; }
 
         /* --- Landing Page Interaktif --- */
@@ -149,6 +167,26 @@
     </div>
 
     <script>
+        /* ====================================================
+           LAPISAN KEAMANAN 2: PROTEKSI JAVASCRIPT
+           Mematikan klik kanan dan shortcut rawan (Inspect Element)
+        ==================================================== */
+        // 1. Mematikan klik kanan di seluruh area website
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 2. Mematikan shortcut keyboard untuk F12, Ctrl+U (View Source), Ctrl+S (Save), dan Ctrl+Shift+I (Inspect)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+               (e.ctrlKey && e.key === 'u') || 
+               (e.ctrlKey && e.key === 's') || 
+               (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+               (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+
         /* ----------------------------------------------------
            1. LOGIKA LANDING PAGE 'PERMISI' & AUDIO GITAR
         ---------------------------------------------------- */
