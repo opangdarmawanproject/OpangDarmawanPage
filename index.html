@@ -107,7 +107,7 @@
         
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
         
-        /* Default Iframe Width (Misal PDF, Sketchfab, YouTube, dan Custom Link) */
+        /* Default Iframe Width (Misal PDF, Sketchfab, YouTube, Link Produk) */
         .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
         
         /* Iframe Khusus Instagram Reels (Rasio Vertikal) */
@@ -326,24 +326,44 @@
                 { title: "Arsitektur", cover: "https://picsum.photos/400/300?random=23", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] },
                 { title: "Animasi 3D", cover: "https://picsum.photos/400/300?random=24", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
-            // --- KATEGORI BARU DITAMBAHKAN DI SINI ---
-            "Video Foto PowerPoint Png": [
+            
+            // --- KATEGORI BARU: PRODUK ---
+            "Produk": [
                 {
-                    title: "Paket Presentasi & Media 1",
+                    title: "Video",
                     cover: "https://picsum.photos/400/300?random=100",
                     items: [
-                        { title: "Template PowerPoint 1", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=101" },
-                        { title: "Video & Foto Aset 1", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=102" },
-                        { title: "Koleksi PNG 1", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=103" }
+                        // Ganti URL "https://example.com" dengan link/iframe konten Anda
+                        { title: "Produk Video 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=101" },
+                        { title: "Produk Video 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=102" },
+                        { title: "Produk Video 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=103" }
                     ]
                 },
                 {
-                    title: "Paket Presentasi & Media 2",
+                    title: "Foto",
                     cover: "https://picsum.photos/400/300?random=104",
                     items: [
-                        { title: "Template PowerPoint 2", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=105" },
-                        { title: "Video & Foto Aset 2", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=106" },
-                        { title: "Koleksi PNG 2", type: "iframe", src: "https://example.com", cover: "https://picsum.photos/400/300?random=107" }
+                        { title: "Produk Foto 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=105" },
+                        { title: "Produk Foto 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=106" },
+                        { title: "Produk Foto 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=107" }
+                    ]
+                },
+                {
+                    title: "PowerPoint",
+                    cover: "https://picsum.photos/400/300?random=108",
+                    items: [
+                        { title: "Presentasi 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=109" },
+                        { title: "Presentasi 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=110" },
+                        { title: "Presentasi 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=111" }
+                    ]
+                },
+                {
+                    title: "Png",
+                    cover: "https://picsum.photos/400/300?random=112",
+                    items: [
+                        { title: "Gambar PNG 1", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=113" },
+                        { title: "Gambar PNG 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=114" },
+                        { title: "Gambar PNG 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=115" }
                     ]
                 }
             ]
@@ -403,7 +423,7 @@
         renderSubCategories(currentActiveCategory);
 
         /* ----------------------------------------------------
-           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / YT / SKETCHFAB / IFRAME)
+           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / YT / SKETCHFAB / IFRAME LINK)
         ---------------------------------------------------- */
         const modal = document.getElementById('media-modal');
         const mediaContent = document.getElementById('media-content');
@@ -472,9 +492,9 @@
                 const sketchfabUrl = formatSketchfabUrl(src);
                 mediaContent.innerHTML = `<iframe title="3D model" src="${sketchfabUrl}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
             
-            // --- LOGIKA BARU UNTUK IFRAME UMUM ---
-            } else if (type === 'iframe') {
-                mediaContent.innerHTML = `<iframe src="${src}" title="Embedded Web Content" frameborder="0" allowfullscreen></iframe>`;
+            // LOGIKA BARU: Pemutar Link Iframe Umum (Untuk Kategori Produk)
+            } else if (type === 'iframe-link') {
+                mediaContent.innerHTML = `<iframe src="${src}" title="Tampilan Produk" frameborder="0" allowfullscreen></iframe>`;
             }
         }
 
