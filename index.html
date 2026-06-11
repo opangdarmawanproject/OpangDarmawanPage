@@ -107,7 +107,7 @@
         
         .media-content-container img, .media-content-container video { max-width: 100%; max-height: 100%; border: 5px solid #fff; box-shadow: 0 0 30px #ff00ff; }
         
-        /* Default Iframe Width (Misal PDF, Sketchfab, YouTube, Link Produk) */
+        /* Default Iframe Width */
         .media-content-container iframe { width: 100%; max-width: 1000px; height: 100%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;}
         
         /* Iframe Khusus Instagram Reels (Rasio Vertikal) */
@@ -327,13 +327,12 @@
                 { title: "Animasi 3D", cover: "https://picsum.photos/400/300?random=24", items: [{title:"Segera Hadir", type:"img", src:"https://picsum.photos/1200/800", cover:"https://picsum.photos/400/300"}] }
             ],
             
-            // --- KATEGORI BARU: PRODUK ---
+            // --- KATEGORI: PRODUK ---
             "Produk": [
                 {
                     title: "Video",
                     cover: "https://picsum.photos/400/300?random=100",
                     items: [
-                        // Ganti URL "https://example.com" dengan link/iframe konten Anda
                         { title: "Produk Video 1", type: "iframe-link", src: "https://payhip.com/b/hUGuA" },
                         { title: "Produk Video 2", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=102" },
                         { title: "Produk Video 3", type: "iframe-link", src: "https://example.com", cover: "https://picsum.photos/400/300?random=103" }
@@ -423,13 +422,12 @@
         renderSubCategories(currentActiveCategory);
 
         /* ----------------------------------------------------
-           4. LOGIKA MEDIA VIEWER (GAMBAR / VIDEO / PDF / IG / YT / SKETCHFAB / IFRAME LINK)
+           4. LOGIKA MEDIA VIEWER 
         ---------------------------------------------------- */
         const modal = document.getElementById('media-modal');
         const mediaContent = document.getElementById('media-content');
         const closeModalBtn = document.getElementById('close-modal');
 
-        // Fungsi Pembersih URL IG
         function formatIgUrl(rawUrl) {
             let cleanUrl = rawUrl.split('?')[0];
             if (!cleanUrl.endsWith('/')) { cleanUrl += '/'; }
@@ -437,7 +435,6 @@
             return cleanUrl;
         }
 
-        // Fungsi Pembersih URL YouTube
         function formatYouTubeUrl(rawUrl) {
             let videoId = "";
             if (rawUrl.includes("youtu.be/")) {
@@ -448,22 +445,10 @@
             return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
         }
 
-        // FUNGSI BARU: Mesin Pembersih URL Khusus Sketchfab
         function formatSketchfabUrl(rawUrl) {
-            // Hilangkan semua atribut tracking/tambahan setelah tanda tanya
             let cleanUrl = rawUrl.split('?')[0];
-            
-            // Hilangkan garis miring di paling belakang jika ada
-            if (cleanUrl.endsWith('/')) {
-                cleanUrl = cleanUrl.slice(0, -1);
-            }
-            
-            // Cek apakah URL sudah berakhiran embed. Jika belum, tambahkan.
-            if (!cleanUrl.endsWith('embed')) {
-                cleanUrl += '/embed';
-            }
-            
-            // Tambahkan parameter ?autostart=1 agar model langsung dimuat otomatis
+            if (cleanUrl.endsWith('/')) { cleanUrl = cleanUrl.slice(0, -1); }
+            if (!cleanUrl.endsWith('embed')) { cleanUrl += '/embed'; }
             return cleanUrl + '?autostart=1';
         }
 
@@ -487,20 +472,25 @@
             } else if (type === 'pdf') {
                 mediaContent.innerHTML = `<iframe src="${src}" title="PDF Document Viewer"></iframe>`;
             
-            // LOGIKA DIPERBARUI: Pemutar khusus Sketchfab
             } else if (type === 'sketchfab') {
                 const sketchfabUrl = formatSketchfabUrl(src);
                 mediaContent.innerHTML = `<iframe title="3D model" src="${sketchfabUrl}" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>`;
             
-            // LOGIKA BARU: Pemutar Link Iframe Umum (Untuk Kategori Produk)
+            // --- LOGIKA BARU: IFRAME LINK DENGAN TOMBOL CADANGAN ---
             } else if (type === 'iframe-link') {
-                mediaContent.innerHTML = `<iframe src="${src}" title="Tampilan Produk" frameborder="0" allowfullscreen></iframe>`;
+                mediaContent.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <iframe src="${src}" title="Tampilan Eksternal" frameborder="0" allowfullscreen style="width: 100%; max-width: 1000px; height: 85%; border: 5px solid #fff; background: #fff; box-shadow: 0 0 30px #ff00ff;"></iframe>
+                        <p style="color: #fff; font-family: 'Poppins'; text-align: center; margin-top: 15px; font-weight: bold;">Layar Kosong?</p>
+                        <a href="${src}" target="_blank" style="padding: 10px 25px; background: #ffff00; color: #000; text-decoration: none; font-family: 'Bangers'; font-size: 1.2rem; border: 3px solid #000; box-shadow: 4px 4px 0 #00ffff; transition: 0.2s; border-radius: 5px;">🚀 BUKA LINK DI TAB BARU</a>
+                    </div>
+                `;
             }
         }
 
         closeModalBtn.onclick = () => {
             modal.style.display = 'none';
-            mediaContent.innerHTML = ''; // Menghentikan video / iframe dengan mengosongkan konten
+            mediaContent.innerHTML = ''; 
         };
 
         /* ----------------------------------------------------
